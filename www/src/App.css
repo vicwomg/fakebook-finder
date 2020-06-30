@@ -1,0 +1,112 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+table {
+  width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0;
+}
+
+td,
+th {
+  padding: 10px;
+  border: none;
+}
+
+tr th {
+  background-color: lightgrey;
+}
+
+tr.search-result:hover {
+  background-color: lightblue;
+  cursor: pointer;
+}
+
+.loader {
+  border: 5px solid #f3f3f3; /* Light grey */
+  border-top: 5px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.react-pdf__Document {
+  display: flex;
+}
+
+@page {
+  size: auto;
+  margin: 0mm;
+}
+
+@media print {
+  .react-pdf__Document {
+    display: block;
+  }
+  .react-pdf__Page {
+    width: 100%;
+    page-break-after: always;
+    transform-origin: top center;
+    transform: scale(1.2);
+  }
+  .react-pdf__Page:nth-of-type(2) {
+    margin-top: 40px;
+  }
+  .title-bar {
+    visibility: hidden;
+  }
+}
+
+p,
+table {
+  font-size: 18px;
+}
