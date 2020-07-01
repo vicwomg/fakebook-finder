@@ -28,7 +28,6 @@ app.use(cookieParser());
 app.use(cors());
 
 console.log("PDF path: " + process.env.PDF_PATH);
-console.log("PDF index path: " + process.env.PDF_INDEX_PATH);
 
 // Show routes called in console during development
 if (process.env.NODE_ENV === "development") {

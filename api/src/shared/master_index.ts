@@ -3,12 +3,14 @@ import fs from "fs";
 import path from "path";
 
 const getMasterIndex = () => {
-  const fakebookIndexPath = process.env.PDF_INDEX_PATH;
+  // const fakebookIndexPath = process.env.PDF_INDEX_PATH;
+  const fakebookIndexPath = __dirname + "/fakebook_indexes";
+
   if (fakebookIndexPath) {
     const fakebooks = fs.readdirSync(fakebookIndexPath);
     var file = "";
     fakebooks.map((e) => {
-      file += fs.readFileSync(path.join(fakebookIndexPath, e), "utf-8");
+      file += "\n" + fs.readFileSync(path.join(fakebookIndexPath, e), "utf-8");
     });
 
     const data = Papa.parse(file, { delimiter: "," }).data;

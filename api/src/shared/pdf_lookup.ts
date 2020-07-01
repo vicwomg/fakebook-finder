@@ -20,7 +20,7 @@ const getPdf = async (fakebookName: string, page: string) => {
     const uint8Array = fs.readFileSync(filePath);
     const sourcePdfDoc = await PDFDocument.load(uint8Array);
     let after = Date.now();
-    console.log("Loading pdf took (ms): " + (after - before));
+    // console.log("Loading pdf took (ms): " + (after - before));
 
     //build output pdf
     before = Date.now();
@@ -32,7 +32,7 @@ const getPdf = async (fakebookName: string, page: string) => {
     const pdfBytes = await pdfDoc.save();
     var pdfBuffer = Buffer.from(pdfBytes.buffer);
     after = Date.now();
-    console.log("Building pdf took (ms): " + (after - before));
+    // console.log("Building pdf took (ms): " + (after - before));
     return pdfBuffer;
   } else {
     throw Error("PDF file not found: " + fakebookName);

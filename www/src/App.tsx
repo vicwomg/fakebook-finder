@@ -15,13 +15,18 @@ function App() {
 
   const [results, setResults] = React.useState<Array<SearchResult>>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [input, setInput] = React.useState<string>();
+  const [input, setInput] = React.useState<string>("");
   const [searchFailed, setSearchFailed] = React.useState<boolean>(false);
   const [pdf, setPdf] = React.useState<Blob>();
   const [twoPages, setTwoPages] = React.useState<boolean>(false);
 
+  const resetUI = () => {
+    setPdf(undefined);
+    setResults([]);
+  };
+
   const handleSearch = (value: string) => {
-    if (!!value) {
+    if (!!value && value.length >= 2) {
       setLoading(true);
       fetch(`${API_URL}/search/song?q=${encodeURI(value)}`)
         .then((response) => response.json())
@@ -50,7 +55,6 @@ function App() {
     setInput("");
     const url = `${API_URL}/search/pdf?source=${source}&page=${page}`;
     const response = await fetch(url);
-    console.log(encodeURI(url));
     const content = await response.blob();
     setResults([]);
     setPdf(content);
@@ -76,7 +80,12 @@ function App() {
           marginBottom: 10,
         }}
       >
-        <h2 style={{ margin: "10px 20px 10px 0" }}>Fakebook Finder</h2>
+        <h2
+          style={{ margin: "10px 20px 10px 0", cursor: "pointer" }}
+          onClick={resetUI}
+        >
+          Fakebook Finder
+        </h2>
         <input
           placeholder="Song title"
           onChange={handleInputChange}
@@ -100,13 +109,8 @@ function App() {
         </>
       )}
       {results && !loading && results.length > 0 && (
-        <table style={{ textAlign: "left" }}>
+        <table style={{ textAlign: "left", marginTop: 20, marginBottom: 20 }}>
           <tbody>
-            <tr style={{ fontSize: 12 }}>
-              <th>Title</th>
-              <th>Source</th>
-              <th>Page</th>
-            </tr>
             {results.map((r, index) => (
               <tr
                 onClick={() => handleClick(r.source, r.page)}
@@ -117,9 +121,6 @@ function App() {
                   <b>{r.title}</b>
                 </td>
                 <td>{r.source}</td>
-                <td>
-                  <i>{r.page}</i>
-                </td>
               </tr>
             ))}
           </tbody>
@@ -133,13 +134,6 @@ function App() {
           </span>
         </p>
       )}
-      {!input && !pdf && !loading && (
-        <p style={{ fontSize: 70 }}>
-          <span role="img" aria-label="music">
-            🎼
-          </span>
-        </p>
-      )}
       {pdf && (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Document file={pdf}>
@@ -147,6 +141,13 @@ function App() {
             {twoPages && <Page pageNumber={2} />}
           </Document>
         </div>
+      )}
+      {!pdf && results.length == 0 && (
+        <p style={{ fontSize: 70 }}>
+          <span role="img" aria-label="music">
+            🎼
+          </span>
+        </p>
       )}
     </div>
   );
