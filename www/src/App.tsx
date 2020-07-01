@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import _ from "lodash";
+import { isMobile } from "react-device-detect";
 import { Document, Page, pdfjs } from "react-pdf";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -69,23 +70,8 @@ function App() {
 
   return (
     <div className="App">
-      <div
-        className="title-bar"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#282c34",
-          color: "white",
-          marginBottom: 10,
-        }}
-      >
-        <h2
-          style={{ margin: "10px 20px 10px 0", cursor: "pointer" }}
-          onClick={resetUI}
-        >
-          Fakebook Finder
-        </h2>
+      <div className="title-bar">
+        <h2 onClick={resetUI}>Fakebook Finder</h2>
         <input
           placeholder="Song title"
           onChange={handleInputChange}
@@ -94,37 +80,34 @@ function App() {
         ></input>
 
         {pdf && (
-          <button
-            onClick={() => setTwoPages(!twoPages)}
-            style={{ marginLeft: 20 }}
-          >
-            Show {twoPages ? "1 page" : "2 pages"}
-          </button>
+          <div>
+            <button onClick={() => setTwoPages(!twoPages)}>
+              Show {twoPages ? "1 page" : "2 pages"}
+            </button>
+          </div>
         )}
       </div>
       {loading && (
         <>
-          <p style={{ marginTop: 50 }}>Just a sec...</p>
           <div className="loader"></div>
+          <p>Just a sec...</p>
         </>
       )}
       {results && !loading && results.length > 0 && (
-        <table style={{ textAlign: "left", marginTop: 20, marginBottom: 20 }}>
-          <tbody>
-            {results.map((r, index) => (
-              <tr
-                onClick={() => handleClick(r.source, r.page)}
-                key={index}
-                className="search-result"
-              >
-                <td>
-                  <b>{r.title}</b>
-                </td>
-                <td>{r.source}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="search-results">
+          {results.map((r, index) => (
+            <div
+              onClick={() => handleClick(r.source, r.page)}
+              key={index}
+              className="search-result"
+            >
+              <h3>{r.title}</h3>
+              <p>
+                {r.source} - p.{r.page}
+              </p>
+            </div>
+          ))}
+        </div>
       )}
       {searchFailed && (
         <p>
@@ -135,16 +118,26 @@ function App() {
         </p>
       )}
       {pdf && (
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div className="pdf-container">
           <Document file={pdf}>
-            <Page pageNumber={1} />
-            {twoPages && <Page pageNumber={2} />}
+            <Page
+              pageNumber={1}
+              width={isMobile ? window.innerWidth : window.innerWidth / 2}
+            />
+            {twoPages && (
+              <>
+                <Page
+                  pageNumber={2}
+                  width={isMobile ? window.innerWidth : window.innerWidth / 2}
+                />
+              </>
+            )}
           </Document>
         </div>
       )}
-      {!pdf && results.length == 0 && (
+      {!pdf && results.length === 0 && (
         <p style={{ fontSize: 70 }}>
-          <span role="img" aria-label="music">
+          <span role="img" aria-label="clef">
             🎼
           </span>
         </p>

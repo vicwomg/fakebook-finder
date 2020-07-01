@@ -39,6 +39,7 @@ const pdfLibrary: pdfFile[] = [
   },
   { name: "Jazz Fakebook", pdf: "jfakebk.pdf", offset: 0 },
   { name: "Jazz LTD", pdf: "jazzltd.pdf", offset: 0 },
+  { name: "the Latin Real Book", pdf: "theLatinRealBook.pdf", offset: 0 },
   { name: "Library Of Musicians' Jazz", pdf: "lmjazz.pdf", offset: 0 },
   { name: "the New Real Book I", pdf: "nrealbk1.pdf", offset: 0 },
   { name: "the New Real Book II", pdf: "nrealbk2.pdf", offset: 0 },

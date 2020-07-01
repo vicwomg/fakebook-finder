@@ -17,13 +17,14 @@
     "lodash": "^4.17.15",
     "papaparse": "^5.2.0",
     "react": "^16.13.1",
+    "react-device-detect": "^1.13.1",
     "react-dom": "^16.13.1",
     "react-pdf": "^4.1.0",
     "react-scripts": "3.4.1",
     "typescript": "^3.9.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=4000 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
