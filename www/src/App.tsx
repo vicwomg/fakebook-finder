@@ -19,11 +19,21 @@ const PdfContainer = ({ pdf }: { pdf: Blob }) => {
     <>
       <div className="pdf-container">
         <Document file={pdf} onLoadSuccess={(doc) => setNumPages(doc.numPages)}>
-          {pages.map((e) => (
-            <Page
-              pageNumber={e}
-              width={isMobile ? window.innerWidth : window.innerWidth / 2}
-            />
+          {pages.map((e, index) => (
+            <>
+              {/* this video loop hack keeps the screen from dimming, android only probably */}
+              <video width="1" height="1" autoPlay muted loop playsInline>
+                <source
+                  src={process.env.PUBLIC_URL + "/white.mp4"}
+                  type="video/mp4"
+                />
+              </video>
+              <Page
+                key={index}
+                pageNumber={e}
+                width={isMobile ? window.innerWidth : window.innerWidth / 2}
+              />
+            </>
           ))}
           {addPage && (
             <Page
@@ -34,7 +44,6 @@ const PdfContainer = ({ pdf }: { pdf: Blob }) => {
         </Document>
       </div>
       <div id="extra-page">
-        {!addPage && <span>Page missing?</span>}
         <button
           onClick={() => setAddPage(!addPage)}
           style={{ marginBottom: 20 }}
