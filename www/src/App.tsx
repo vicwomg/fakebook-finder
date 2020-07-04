@@ -11,6 +11,41 @@ type SearchResult = {
   source: string;
 };
 
+const PdfContainer = ({ pdf }: { pdf: Blob }) => {
+  const [numPages, setNumPages] = React.useState<number>(1);
+  const [addPage, setAddPage] = React.useState<boolean>(false);
+  const pages = _.range(1, numPages);
+  return (
+    <>
+      <div className="pdf-container">
+        <Document file={pdf} onLoadSuccess={(doc) => setNumPages(doc.numPages)}>
+          {pages.map((e) => (
+            <Page
+              pageNumber={e}
+              width={isMobile ? window.innerWidth : window.innerWidth / 2}
+            />
+          ))}
+          {addPage && (
+            <Page
+              pageNumber={numPages}
+              width={isMobile ? window.innerWidth : window.innerWidth / 2}
+            />
+          )}
+        </Document>
+      </div>
+      <div id="extra-page">
+        {!addPage && <span>Page missing?</span>}
+        <button
+          onClick={() => setAddPage(!addPage)}
+          style={{ marginBottom: 20 }}
+        >
+          {addPage ? "Hide extra page" : "Show next page"}
+        </button>
+      </div>
+    </>
+  );
+};
+
 function App() {
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -19,7 +54,6 @@ function App() {
   const [input, setInput] = React.useState<string>("");
   const [searchFailed, setSearchFailed] = React.useState<boolean>(false);
   const [pdf, setPdf] = React.useState<Blob>();
-  const [twoPages, setTwoPages] = React.useState<boolean>(false);
 
   const resetUI = () => {
     setPdf(undefined);
@@ -46,7 +80,6 @@ function App() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
     setPdf(undefined);
-    setTwoPages(false);
     e.target.value !== null && setSearchFailed(false);
     debounceSearch(e.target.value);
   };
@@ -71,21 +104,13 @@ function App() {
   return (
     <div className="App">
       <div className="title-bar">
-        <h2 onClick={resetUI}>Fakebook Finder</h2>
+        <h2 onClick={resetUI}>OneFakebook</h2>
         <input
           placeholder="Song title"
           onChange={handleInputChange}
           value={input}
           style={{ fontSize: 20 }}
         ></input>
-
-        {pdf && (
-          <div>
-            <button onClick={() => setTwoPages(!twoPages)}>
-              Show {twoPages ? "1 page" : "2 pages"}
-            </button>
-          </div>
-        )}
       </div>
       {loading && (
         <>
@@ -117,24 +142,7 @@ function App() {
           </span>
         </p>
       )}
-      {pdf && (
-        <div className="pdf-container">
-          <Document file={pdf}>
-            <Page
-              pageNumber={1}
-              width={isMobile ? window.innerWidth : window.innerWidth / 2}
-            />
-            {twoPages && (
-              <>
-                <Page
-                  pageNumber={2}
-                  width={isMobile ? window.innerWidth : window.innerWidth / 2}
-                />
-              </>
-            )}
-          </Document>
-        </div>
-      )}
+      {pdf && <PdfContainer pdf={pdf} />}
       {!pdf && results.length === 0 && (
         <p style={{ fontSize: 70 }}>
           <span role="img" aria-label="clef">

@@ -1,38 +1,60 @@
 var fs = require("fs");
-import { PDFDocument } from "pdf-lib";
-import pdfLibrary, { pdfFile } from "./pdf_library";
+import { PDFDocument, ParseSpeeds } from "pdf-lib";
+import pdfLibrary from "./pdf_library";
+import { masterIndex } from "@server";
+import { libraryObject } from "./constants";
+import _ from "lodash";
 
-const lookupPdfData = (fakebookName: string) => {
-  return pdfLibrary.find((e: pdfFile) => {
+const lookupLibrary = (fakebookName: string) => {
+  return pdfLibrary.find((e: libraryObject) => {
     return e.name === fakebookName;
   });
 };
 
-const getPdf = async (fakebookName: string, page: string) => {
+const getNextSongPageNumber = (
+  fakebookName: string,
+  startPage: number
+): number => {
+  const currentSongIndex = masterIndex.findIndex((e) => {
+    return e.source === fakebookName && e.page === startPage;
+  });
+  const nextSong = masterIndex[currentSongIndex + 1];
+  if (nextSong.page > startPage) {
+    return masterIndex[currentSongIndex + 1].page;
+  } else {
+    //if it's at the end of the book, we'll assume this chart is one page
+    return startPage + 1;
+  }
+};
+
+const getPdf = async (fakebookName: string, page: number) => {
   const pdfPath = process.env.PDF_PATH;
-  const pageNumber = parseInt(page);
-  const libraryObject = lookupPdfData(fakebookName);
+  const libraryObject = lookupLibrary(fakebookName);
 
   if (!!libraryObject) {
     //load source pdf
-    let before = Date.now();
     const filePath = pdfPath + "/" + libraryObject.pdf;
     const uint8Array = fs.readFileSync(filePath);
-    const sourcePdfDoc = await PDFDocument.load(uint8Array);
-    let after = Date.now();
-    // console.log("Loading pdf took (ms): " + (after - before));
+    const sourcePdfDoc = await PDFDocument.load(uint8Array, {
+      parseSpeed: ParseSpeeds.Fastest,
+    });
 
     //build output pdf
-    before = Date.now();
     const pdfDoc = await PDFDocument.create();
-    const page = pageNumber - 1 + libraryObject.offset;
-    const copiedPages = await pdfDoc.copyPages(sourcePdfDoc, [page, page + 1]);
+    const pageIndex = page - 1 + libraryObject.offset;
+    var nextSongPageIndex =
+      getNextSongPageNumber(fakebookName, page) - 1 + libraryObject.offset;
+    nextSongPageIndex++; // tack on extra page just in case
+
+    const copiedPages = await pdfDoc.copyPages(
+      sourcePdfDoc,
+      _.range(pageIndex, nextSongPageIndex)
+    );
     copiedPages.map((e) => pdfDoc.addPage(e));
 
     const pdfBytes = await pdfDoc.save();
     var pdfBuffer = Buffer.from(pdfBytes.buffer);
-    after = Date.now();
-    // console.log("Building pdf took (ms): " + (after - before));
+
     return pdfBuffer;
   } else {
     throw Error("PDF file not found: " + fakebookName);

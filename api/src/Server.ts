@@ -12,6 +12,7 @@ import logger from "@shared/Logger";
 import getMasterIndex from "@shared/master_index";
 
 import cors from "cors";
+import { songObject } from "@shared/constants";
 
 require("dotenv").config();
 
@@ -52,6 +53,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 console.log("Fetching master index...");
 app.set("master_index", getMasterIndex());
+export const masterIndex: songObject[] = app.get("master_index");
 console.log("Done.");
 
 /************************************************************************************

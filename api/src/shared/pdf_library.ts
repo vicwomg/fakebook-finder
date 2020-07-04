@@ -1,10 +1,6 @@
-export type pdfFile = {
-  name: string;
-  pdf: string;
-  offset: number;
-};
+import { libraryObject } from "./constants";
 
-const pdfLibrary: pdfFile[] = [
+const pdfLibrary: libraryObject[] = [
   {
     name: "557 Standards Swing to Bop",
     pdf: "557JazzStandards.pdf",
