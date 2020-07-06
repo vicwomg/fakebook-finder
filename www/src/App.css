@@ -40,10 +40,16 @@
 .title-bar {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   background-color: #282c34;
   color: white;
-  padding: 10px;
+  padding: 10px 20px;
+}
+
+.title-bar a,
+.title-bar a:visited {
+  text-decoration: none;
+  color: white;
 }
 
 h2 {
@@ -55,10 +61,6 @@ h2 {
 p,
 table {
   font-size: 18px;
-}
-
-button {
-  margin-left: 20px;
 }
 
 table {
@@ -76,7 +78,7 @@ tr th {
 }
 
 .search-results {
-  padding: 10px 10px;
+  padding: 0 10px;
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
@@ -124,8 +126,8 @@ tr th {
 
 .pdf-container {
   display: flex;
+  margin-top: 10px;
   justify-content: center;
-  padding: 20px 0px;
   width: 100%;
 }
 
@@ -148,7 +150,7 @@ tr th {
     width: 100%;
     page-break-after: always;
     transform-origin: top center;
-    /* transform: scale(1.1); */
+    transform: scale(1.1);
   }
   .react-pdf__Page:nth-of-type(2) {
     margin-top: 40px;
@@ -164,7 +166,6 @@ tr th {
 @media only screen and (max-width: 500px) {
   h2 {
     margin-right: 0px;
-    margin-bottom: 10px;
   }
   .title-bar {
     display: block;
