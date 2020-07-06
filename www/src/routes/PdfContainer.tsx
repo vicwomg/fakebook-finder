@@ -6,7 +6,6 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { Document, Page, pdfjs } from "react-pdf";
 import { isMobile } from "react-device-detect";
 import qs, { ParsedQs } from "qs";
-import QueryString from "qs";
 import TitleBar from "../components/TitleBar";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -46,7 +45,9 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
             rightContent={
               query &&
               query.q && (
-                <Link to={`/search/${query.q}`}>‹ Back to search results</Link>
+                <Link to={`/search/${query.q}`}>
+                  ‹ {isMobile ? "Search results" : "Back to search results"}
+                </Link>
               )
             }
           />

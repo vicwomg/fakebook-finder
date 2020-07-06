@@ -164,12 +164,6 @@ tr th {
 }
 
 @media only screen and (max-width: 500px) {
-  h2 {
-    margin-right: 0px;
-  }
-  .title-bar {
-    display: block;
-  }
   button {
     margin-top: 5px;
     margin-left: 0px;
