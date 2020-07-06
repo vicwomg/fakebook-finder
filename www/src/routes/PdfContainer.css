@@ -4,3 +4,19 @@
   justify-content: center;
   width: 100%;
 }
+
+.pdf-container-print-only {
+  display: none;
+}
+
+@media print {
+  .pdf-container {
+    display: none;
+  }
+  .pdf-container-print-only {
+    display: flex;
+    margin-top: 10px;
+    justify-content: center;
+    width: 100%;
+  }
+}

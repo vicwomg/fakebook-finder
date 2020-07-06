@@ -15,10 +15,15 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 const useMountEffect = (fun: () => void) => React.useEffect(fun, []);
 
 const PdfContainer = ({ location }: RouteComponentProps) => {
+  const defaultDesktopPdfWidth = window.innerWidth / 2 - 20;
+
   let { source, page } = useParams();
   const [numPages, setNumPages] = React.useState<number>(0);
   const [addPage, setAddPage] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(true);
+  const [pdfWidth, setPdfWidth] = React.useState<number>(
+    isMobile ? window.innerWidth : defaultDesktopPdfWidth
+  );
   const [pdf, setPdf] = React.useState<Blob>();
   const [query, setQuery] = React.useState<ParsedQs>();
   const pages = _.range(1, numPages);
@@ -29,6 +34,17 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
     const content = await response.blob();
     setPdf(content);
     setLoading(false);
+  };
+
+  const isZoomed = (): boolean => {
+    return pdfWidth >= window.innerWidth;
+  };
+
+  const handleZoom = () => {
+    if (!isMobile) {
+      !isZoomed() && setPdfWidth(window.innerWidth);
+      isZoomed() && setPdfWidth(defaultDesktopPdfWidth);
+    }
   };
 
   useMountEffect(() => {
@@ -52,7 +68,11 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
         <LoadingSpinner />
       ) : (
         <>
-          <div className="pdf-container">
+          <div
+            className="pdf-container"
+            onClick={handleZoom}
+            style={{ cursor: isZoomed() ? "zoom-out" : "zoom-in" }}
+          >
             <Document
               file={pdf}
               loading={<LoadingSpinner />}
@@ -67,24 +87,28 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
                       type="video/mp4"
                     />
                   </video>
-                  <Page
-                    pageNumber={e}
-                    width={
-                      isMobile ? window.innerWidth : window.innerWidth / 2 - 20
-                    }
-                  />
+                  <Page pageNumber={e} width={pdfWidth} />
+                </React.Fragment>
+              ))}
+              {addPage && <Page pageNumber={numPages} width={pdfWidth} />}
+            </Document>
+          </div>
+
+          {/* We need a special hidden version of the doc for formatting for printing, 
+          otherwise there's page size issues due to hard-coded canvas */}
+          <div className="pdf-container-print-only">
+            <Document file={pdf}>
+              {pages.map((e, index) => (
+                <React.Fragment key={index}>
+                  <Page pageNumber={e} width={window.innerWidth / 2} />
                 </React.Fragment>
               ))}
               {addPage && (
-                <Page
-                  pageNumber={numPages}
-                  width={
-                    isMobile ? window.innerWidth : window.innerWidth / 2 - 20
-                  }
-                />
+                <Page pageNumber={numPages} width={window.innerWidth / 2} />
               )}
             </Document>
           </div>
+
           {!!numPages && (
             <div className="extra-page">
               <button
