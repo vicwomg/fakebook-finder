@@ -1,0 +1,25 @@
+.title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #282c34;
+  color: white;
+  padding: 10px 20px;
+}
+
+.title-bar a,
+.title-bar a:visited {
+  text-decoration: none;
+  color: white;
+}
+
+.title-bar h2 {
+  margin: 0px;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 500px) {
+  .title-bar {
+    padding: 10px 10px;
+  }
+}

@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import _ from "lodash";
 import LoadingSpinner from "../components/LoadingSpinner";
 import TitleBar from "../components/TitleBar";
+import styles from "./Search.module.css";
 
 type SearchResult = {
   title: string;
@@ -80,8 +81,8 @@ const Search = () => {
           }}
           style={{
             cursor: "pointer",
-            marginLeft: -22,
-            fontSize: 12,
+            marginLeft: -24,
+            fontSize: 16,
             fontWeight: 500,
           }}
         >
@@ -90,12 +91,12 @@ const Search = () => {
 
         {loading && <LoadingSpinner />}
         {results && !loading && results.length > 0 && (
-          <div className="search-results">
+          <div className={styles.results}>
             {results.map((r, index) => (
               <div
                 onClick={() => handleClick(r.source, r.page)}
                 key={index}
-                className="search-result"
+                className={styles.result}
               >
                 <h3>{r.title}</h3>
                 <p>

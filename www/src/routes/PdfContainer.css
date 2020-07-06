@@ -1,0 +1,6 @@
+.pdf-container {
+  display: flex;
+  margin-top: 10px;
+  justify-content: center;
+  width: 100%;
+}

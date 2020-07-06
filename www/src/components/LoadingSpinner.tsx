@@ -1,8 +1,10 @@
 import React from "react";
-const LoadingSpinner = () => (
+import "./LoadingSpinner.css";
+
+const LoadingSpinner = ({ message }: { message?: string }) => (
   <>
     <div className="loader"></div>
-    <p>Just a sec...</p>
+    <p>{message ? message : "Just a sec..."}</p>
   </>
 );
 

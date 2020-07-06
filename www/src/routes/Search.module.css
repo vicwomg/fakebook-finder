@@ -1,0 +1,25 @@
+.results {
+  padding: 0 10px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.result {
+  padding: 10px;
+}
+
+.result:hover {
+  background-color: lightblue;
+  cursor: pointer;
+}
+
+.result h3 {
+  margin: 0px 0px 5px;
+}
+
+.result p {
+  font-size: 14px;
+  font-style: italic;
+  margin: 0px;
+}

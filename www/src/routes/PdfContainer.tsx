@@ -6,6 +6,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { Document, Page, pdfjs } from "react-pdf";
 import { isMobile } from "react-device-detect";
 import qs, { ParsedQs } from "qs";
+import "./PdfContainer.css";
 import TitleBar from "../components/TitleBar";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -37,20 +38,20 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
 
   return (
     <>
+      <TitleBar
+        rightContent={
+          query &&
+          query.q && (
+            <Link to={`/search/${query.q}`}>
+              ‹ {isMobile ? "Search results" : "Back to search results"}
+            </Link>
+          )
+        }
+      />
       {loading ? (
         <LoadingSpinner />
       ) : (
         <>
-          <TitleBar
-            rightContent={
-              query &&
-              query.q && (
-                <Link to={`/search/${query.q}`}>
-                  ‹ {isMobile ? "Search results" : "Back to search results"}
-                </Link>
-              )
-            }
-          />
           <div className="pdf-container">
             <Document
               file={pdf}
@@ -85,7 +86,7 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
             </Document>
           </div>
           {!!numPages && (
-            <div id="extra-page">
+            <div className="extra-page">
               <button
                 onClick={() => setAddPage(!addPage)}
                 style={{ marginBottom: 20, marginTop: 20 }}

@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import "./TitleBar.css";
 
 const TitleBar = ({ rightContent }: { rightContent?: ReactNode }) => {
   return (
