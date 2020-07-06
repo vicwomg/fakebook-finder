@@ -164,6 +164,9 @@ tr th {
 }
 
 @media only screen and (max-width: 500px) {
+  .title-bar {
+    padding: 10px 10px;
+  }
   button {
     margin-top: 5px;
     margin-left: 0px;

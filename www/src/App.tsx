@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { API_URL } from "./constants";
 import PdfContainer from "./routes/PdfContainer";
 import Search from "./routes/Search";
