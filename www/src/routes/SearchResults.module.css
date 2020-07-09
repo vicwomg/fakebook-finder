@@ -1,12 +1,12 @@
 .results {
-  padding: 0 10px;
+  padding: 0;
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .result {
-  padding: 10px;
+  padding: 10px 20px;
 }
 
 .result:hover {

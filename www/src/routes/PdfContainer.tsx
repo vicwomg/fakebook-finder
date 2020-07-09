@@ -5,10 +5,23 @@ import _ from "lodash";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { Document, Page, pdfjs } from "react-pdf";
 import { isMobile } from "react-device-detect";
-import qs, { ParsedQs } from "qs";
 import "./PdfContainer.css";
 import TitleBar from "../components/TitleBar";
+import SearchResults from "./SearchResults";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch, faList } from "@fortawesome/free-solid-svg-icons";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
+type searchData = {
+  searchQuery: string;
+  searchResults: SearchResult[];
+};
+
+type SearchResult = {
+  title: string;
+  page: string;
+  source: string;
+};
 
 // Stops linter from whining:
 // https://stackoverflow.com/questions/53120972/how-to-call-loading-function-with-react-useeffect-only-once
@@ -20,12 +33,12 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
   let { source, page } = useParams();
   const [numPages, setNumPages] = React.useState<number>(0);
   const [addPage, setAddPage] = React.useState<boolean>(false);
+  const [showResults, setShowResults] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(true);
   const [pdfWidth, setPdfWidth] = React.useState<number>(
     isMobile ? window.innerWidth : defaultDesktopPdfWidth
   );
   const [pdf, setPdf] = React.useState<Blob>();
-  const [query, setQuery] = React.useState<ParsedQs>();
   const pages = _.range(1, numPages);
 
   const loadPdf = async () => {
@@ -48,19 +61,42 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
   };
 
   useMountEffect(() => {
-    setQuery(qs.parse(location.search, { ignoreQueryPrefix: true }));
     loadPdf();
   });
+
+  const previousState = location.state as searchData;
+  const searchQuery =
+    previousState && previousState.searchQuery
+      ? previousState.searchQuery
+      : null;
+  const searchResults =
+    previousState && previousState.searchResults
+      ? previousState.searchResults
+      : null;
 
   return (
     <>
       <TitleBar
         rightContent={
-          query &&
-          query.q && (
-            <Link to={`/search/${query.q}`}>
-              ‹ {isMobile ? "Search results" : "Back to search results"}
-            </Link>
+          searchQuery && (
+            <>
+              <div>
+                <Link to={`/search/${searchQuery}`}>
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    title="Back to search results"
+                  />
+                </Link>
+                &nbsp; &nbsp; &nbsp;
+                <FontAwesomeIcon
+                  icon={faList}
+                  title="Select another chart"
+                  onClick={() => {
+                    setShowResults(!showResults);
+                  }}
+                />
+              </div>
+            </>
           )
         }
       />
@@ -115,6 +151,37 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
               >
                 {addPage ? "Hide extra page" : "Show next page"}
               </button>
+            </div>
+          )}
+          {searchResults && showResults && (
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+                backgroundColor: "rgba(0,0,0,0.5)",
+              }}
+              onClick={() => setShowResults(false)}
+            >
+              <div
+                style={{
+                  position: "fixed",
+                  top: 52,
+                  right: 0,
+                  padding: "10px 0px",
+                  backgroundColor: "white",
+                  overflowY: "auto",
+                  maxHeight: "70vh",
+                  maxWidth: "95vw",
+                }}
+              >
+                <SearchResults
+                  searchResults={searchResults}
+                  searchQuery={searchQuery}
+                />
+              </div>
             </div>
           )}
         </>

@@ -5,6 +5,9 @@ import { API_URL } from "./constants";
 import PdfContainer from "./routes/PdfContainer";
 import Search from "./routes/Search";
 import Info from "./routes/Info";
+import { createBrowserHistory } from "history";
+
+export const history = createBrowserHistory();
 
 const App = () => {
   if (!API_URL) {

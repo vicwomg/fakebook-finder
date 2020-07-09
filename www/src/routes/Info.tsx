@@ -16,8 +16,6 @@ const Info = () => {
       .then((data) => setInfo(data.result));
   }, []);
 
-  console.log(info);
-
   return (
     <>
       <TitleBar />

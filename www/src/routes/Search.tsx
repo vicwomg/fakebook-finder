@@ -1,19 +1,13 @@
 import React from "react";
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { API_URL } from "../constants";
 import { useParams } from "react-router-dom";
 import _ from "lodash";
 import LoadingSpinner from "../components/LoadingSpinner";
 import TitleBar from "../components/TitleBar";
-import styles from "./Search.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-
-type SearchResult = {
-  title: string;
-  page: string;
-  source: string;
-};
+import SearchResults, { SearchResult } from "./SearchResults";
 
 const Search = () => {
   const [results, setResults] = React.useState<Array<SearchResult>>([]);
@@ -21,7 +15,6 @@ const Search = () => {
   const [searchFailed, setSearchFailed] = React.useState<boolean>(false);
   const [input, setInput] = React.useState<string>("");
 
-  const history = useHistory();
   const { query } = useParams();
 
   React.useEffect(() => {
@@ -55,10 +48,6 @@ const Search = () => {
   };
 
   const debounceSearch = React.useCallback(_.debounce(handleSearch, 400), []);
-
-  const handleClick = async (source: string, page: string) => {
-    history.push(`/source/${source}/${page}?q=${input}`);
-  };
 
   return (
     <>
@@ -99,20 +88,7 @@ const Search = () => {
 
         {loading && <LoadingSpinner />}
         {results && !loading && results.length > 0 && (
-          <div className={styles.results}>
-            {results.map((r, index) => (
-              <div
-                onClick={() => handleClick(r.source, r.page)}
-                key={index}
-                className={styles.result}
-              >
-                <h3>{r.title}</h3>
-                <p>
-                  {r.source} - p.{r.page}
-                </p>
-              </div>
-            ))}
-          </div>
+          <SearchResults searchResults={results} searchQuery={input} />
         )}
         {searchFailed && (
           <p>
