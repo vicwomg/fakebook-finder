@@ -25,7 +25,7 @@ type SearchResult = {
 
 const PdfContainer = ({ location }: RouteComponentProps) => {
   const defaultDesktopPdfWidth = window.innerWidth / 2 - 20;
-  const printHeight = 875;
+  const printHeight = 800;
 
   const { source, page } = useParams();
   const [numPages, setNumPages] = React.useState<number>(0);
@@ -49,8 +49,6 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
     }
   };
 
-  //handle situation where we want reload the pdf by selecting from
-  //search results dropdown
   React.useEffect(() => {
     setLoading(true);
     const loadPdf = async () => {
@@ -161,34 +159,18 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
             </div>
           )}
           {searchResults && showResults && (
-            <div
-              style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100vw",
-                height: "100vh",
-                backgroundColor: "rgba(0,0,0,0.5)",
-              }}
-              onClick={() => setShowResults(false)}
-            >
-              <div
-                style={{
-                  position: "fixed",
-                  top: 52,
-                  right: 0,
-                  padding: "10px 0px",
-                  backgroundColor: "white",
-                  overflowY: "auto",
-                  maxHeight: "70vh",
-                  maxWidth: "95vw",
-                }}
-              >
-                <SearchResults
-                  searchResults={searchResults}
-                  searchQuery={searchQuery}
-                  currentSelection={{ source: source, page: page }}
-                />
+            <div className="greyout" onClick={() => setShowResults(false)}>
+              <div className="search-dropdown">
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <div className="caret"></div>
+                </div>
+                <div className="result-container">
+                  <SearchResults
+                    searchResults={searchResults}
+                    searchQuery={searchQuery}
+                    currentSelection={{ source: source, page: page }}
+                  />
+                </div>
               </div>
             </div>
           )}

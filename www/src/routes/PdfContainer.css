@@ -9,6 +9,38 @@
   display: none;
 }
 
+.greyout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.search-dropdown {
+  position: fixed;
+  top: 32px;
+  right: 0px;
+}
+
+/* Styles for caret icons */
+.caret {
+  width: 0;
+  height: 0;
+  margin-right: 20px;
+  border: 10px solid transparent;
+  border-bottom-color: white;
+}
+
+.result-container {
+  padding: 10px 0px;
+  background-color: white;
+  overflow-y: auto;
+  max-height: 70vh;
+  max-width: 95vw;
+}
+
 @media print {
   .pdf-container {
     display: none;
