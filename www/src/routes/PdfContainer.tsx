@@ -23,15 +23,11 @@ type SearchResult = {
   source: string;
 };
 
-// Stops linter from whining:
-// https://stackoverflow.com/questions/53120972/how-to-call-loading-function-with-react-useeffect-only-once
-const useMountEffect = (fun: () => void) => React.useEffect(fun, []);
-
 const PdfContainer = ({ location }: RouteComponentProps) => {
   const defaultDesktopPdfWidth = window.innerWidth / 2 - 20;
   const printHeight = 875;
 
-  let { source, page } = useParams();
+  const { source, page } = useParams();
   const [numPages, setNumPages] = React.useState<number>(0);
   const [addPage, setAddPage] = React.useState<boolean>(false);
   const [showResults, setShowResults] = React.useState<boolean>(false);
@@ -41,14 +37,6 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
   );
   const [pdf, setPdf] = React.useState<Blob>();
   const pages = _.range(1, numPages);
-
-  const loadPdf = async () => {
-    const url = `${API_URL}/fetch/pdf?source=${source}&page=${page}`;
-    const response = await fetch(url);
-    const content = await response.blob();
-    setPdf(content);
-    setLoading(false);
-  };
 
   const isZoomed = (): boolean => {
     return pdfWidth >= window.innerWidth;
@@ -61,9 +49,19 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
     }
   };
 
-  useMountEffect(() => {
+  //handle situation where we want reload the pdf by selecting from
+  //search results dropdown
+  React.useEffect(() => {
+    setLoading(true);
+    const loadPdf = async () => {
+      const url = `${API_URL}/fetch/pdf?source=${source}&page=${page}`;
+      const response = await fetch(url);
+      const content = await response.blob();
+      setPdf(content);
+      setLoading(false);
+    };
     loadPdf();
-  });
+  }, [source, page]);
 
   const previousState = location.state as searchData;
   const searchQuery =
@@ -189,6 +187,7 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
                 <SearchResults
                   searchResults={searchResults}
                   searchQuery={searchQuery}
+                  currentSelection={{ source: source, page: page }}
                 />
               </div>
             </div>
