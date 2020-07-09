@@ -29,7 +29,7 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
   const pages = _.range(1, numPages);
 
   const loadPdf = async () => {
-    const url = `${API_URL}/search/pdf?source=${source}&page=${page}`;
+    const url = `${API_URL}/fetch/pdf?source=${source}&page=${page}`;
     const response = await fetch(url);
     const content = await response.blob();
     setPdf(content);
@@ -93,7 +93,6 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
               {addPage && <Page pageNumber={numPages} width={pdfWidth} />}
             </Document>
           </div>
-
           {/* We need a special hidden version of the doc for formatting for printing, 
           otherwise there's page size issues due to hard-coded canvas */}
           <div className="pdf-container-print-only">
@@ -108,7 +107,6 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
               )}
             </Document>
           </div>
-
           {!!numPages && (
             <div className="extra-page">
               <button

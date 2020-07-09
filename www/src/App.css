@@ -6,6 +6,10 @@ body {
   font-size: 18px;
 }
 
+ul {
+  padding-inline-start: 20px;
+}
+
 .react-pdf__Document {
   display: flex;
   justify-content: center;
@@ -20,7 +24,10 @@ body {
 
 @media print {
   .title-bar {
-    visibility: hidden;
+    display: none;
+  }
+  .title-bar a {
+    display: none;
   }
   .react-pdf__Document {
     display: block;
@@ -30,10 +37,10 @@ body {
     page-break-after: always;
     transform-origin: top center;
   }
-  .react-pdf__Page:nth-of-type(2) ~ .react-pdf__Page {
-    margin-top: 50px;
+  .react-pdf__Page:nth-of-type(1) ~ .react-pdf__Page {
+    margin-top: 35px;
   }
   .extra-page {
-    visibility: hidden;
+    display: none;
   }
 }

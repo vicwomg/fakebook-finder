@@ -1,11 +1,13 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { API_URL } from "../constants";
 import { useParams } from "react-router-dom";
 import _ from "lodash";
 import LoadingSpinner from "../components/LoadingSpinner";
 import TitleBar from "../components/TitleBar";
 import styles from "./Search.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 type SearchResult = {
   title: string;
@@ -60,7 +62,13 @@ const Search = () => {
 
   return (
     <>
-      <TitleBar />
+      <TitleBar
+        rightContent={
+          <Link to="/info">
+            <FontAwesomeIcon icon={faInfoCircle} />{" "}
+          </Link>
+        }
+      />
       <div style={{ padding: 20 }}>
         <input
           placeholder="Enter a song title"

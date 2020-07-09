@@ -54,6 +54,9 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 console.log("Fetching master index...");
 app.set("master_index", getMasterIndex());
 export const masterIndex: songObject[] = app.get("master_index");
+export const fakebookList = [
+  ...new Set(masterIndex.map((item) => item.source)),
+];
 console.log("Done.");
 
 /************************************************************************************

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { API_URL } from "./constants";
 import PdfContainer from "./routes/PdfContainer";
 import Search from "./routes/Search";
+import Info from "./routes/Info";
 
 const App = () => {
   if (!API_URL) {
@@ -17,6 +18,9 @@ const App = () => {
           <Route path="/source/:source/:page" component={PdfContainer}></Route>
           <Route path="/search/:query">
             <Search />
+          </Route>
+          <Route path="/info">
+            <Info />
           </Route>
           <Route path="/">
             <Search />
