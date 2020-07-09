@@ -26,14 +26,14 @@ ul {
   .title-bar {
     display: none;
   }
-  .title-bar a {
+  .title-bar a,
+  .title-bar div {
     display: none;
   }
   .react-pdf__Document {
     display: block;
   }
   .react-pdf__Page {
-    width: 100%;
     page-break-after: always;
     transform-origin: top center;
   }

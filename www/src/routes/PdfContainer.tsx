@@ -9,7 +9,7 @@ import "./PdfContainer.css";
 import TitleBar from "../components/TitleBar";
 import SearchResults from "./SearchResults";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faList } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faList, faPrint } from "@fortawesome/free-solid-svg-icons";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 type searchData = {
@@ -29,6 +29,7 @@ const useMountEffect = (fun: () => void) => React.useEffect(fun, []);
 
 const PdfContainer = ({ location }: RouteComponentProps) => {
   const defaultDesktopPdfWidth = window.innerWidth / 2 - 20;
+  const printHeight = 875;
 
   let { source, page } = useParams();
   const [numPages, setNumPages] = React.useState<number>(0);
@@ -81,16 +82,26 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
           searchQuery && (
             <>
               <div>
+                <FontAwesomeIcon
+                  icon={faPrint}
+                  title="Print"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    window.print();
+                  }}
+                />
+                &nbsp; &nbsp;
                 <Link to={`/search/${searchQuery}`}>
                   <FontAwesomeIcon
                     icon={faSearch}
                     title="Back to search results"
                   />
                 </Link>
-                &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp;
                 <FontAwesomeIcon
                   icon={faList}
                   title="Select another chart"
+                  style={{ cursor: "pointer" }}
                   onClick={() => {
                     setShowResults(!showResults);
                   }}
@@ -135,12 +146,10 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
             <Document file={pdf}>
               {pages.map((e, index) => (
                 <React.Fragment key={index}>
-                  <Page pageNumber={e} width={window.innerWidth / 2} />
+                  <Page pageNumber={e} height={printHeight} />
                 </React.Fragment>
               ))}
-              {addPage && (
-                <Page pageNumber={numPages} width={window.innerWidth / 2} />
-              )}
+              {addPage && <Page pageNumber={numPages} height={printHeight} />}
             </Document>
           </div>
           {!!numPages && (
