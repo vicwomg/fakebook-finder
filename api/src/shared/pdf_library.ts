@@ -7,11 +7,15 @@ const pdfLibrary: libraryObject[] = [
     offset: 6,
   },
   {
+    name: "the Choro Fake Book",
+    pdf: "chorofb.pdf",
+    offset: 3,
+  },
+  {
     name: "the Colorado Cookbook",
     pdf: "colorado_cookbook.pdf",
     offset: 0,
   },
-
   {
     name: "the Creole Jazz Band Fakebook",
     pdf: "cjb_fakebook_2020.pdf",
@@ -27,6 +31,7 @@ const pdfLibrary: libraryObject[] = [
     pdf: "dhatrc.pdf",
     offset: -1,
   },
+  { name: "the Disney Fakebook", pdf: "disneyfake.pdf", offset: 0 },
   { name: "Django Fakebook", pdf: "djangofb.pdf", offset: 0 },
   {
     name: "the Firehouse Jazz Band Dixieland Fakebook",
@@ -35,6 +40,7 @@ const pdfLibrary: libraryObject[] = [
   },
   { name: "Jazz Fakebook", pdf: "jfakebk.pdf", offset: 0 },
   { name: "Jazz LTD", pdf: "jazzltd.pdf", offset: 0 },
+  { name: "Latin Fake Book", pdf: "ltfakebk.pdf", offset: 0 },
   { name: "the Latin Real Book", pdf: "theLatinRealBook.pdf", offset: 0 },
   { name: "Library Of Musicians' Jazz", pdf: "lmjazz.pdf", offset: 0 },
   { name: "the New Real Book I", pdf: "nrealbk1.pdf", offset: 0 },
