@@ -75,17 +75,17 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
     <>
       <TitleBar
         rightContent={
-          searchQuery && (
-            <>
-              <div>
-                <FontAwesomeIcon
-                  icon={faPrint}
-                  title="Print"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    window.print();
-                  }}
-                />
+          <div>
+            <FontAwesomeIcon
+              icon={faPrint}
+              title="Print"
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                window.print();
+              }}
+            />
+            {searchQuery ? (
+              <>
                 &nbsp; &nbsp;
                 <Link to={`/search/${searchQuery}`}>
                   <FontAwesomeIcon
@@ -102,9 +102,16 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
                     setShowResults(!showResults);
                   }}
                 />
-              </div>
-            </>
-          )
+              </>
+            ) : (
+              <>
+                &nbsp; &nbsp;
+                <Link to={`/`}>
+                  <FontAwesomeIcon icon={faSearch} title="Back to search" />
+                </Link>
+              </>
+            )}
+          </div>
         }
       />
       {loading ? (
