@@ -2,6 +2,11 @@ import { libraryObject } from "./constants";
 
 const pdfLibrary: libraryObject[] = [
   {
+    name: "20s - 30s Fake Book",
+    pdf: "20s_30s_fake_book.pdf",
+    offset: 0,
+  },
+  {
     name: "557 Standards Swing to Bop",
     pdf: "557JazzStandards.pdf",
     offset: 6,
@@ -38,6 +43,11 @@ const pdfLibrary: libraryObject[] = [
     pdf: "fjfakebk.pdf",
     offset: 1,
   },
+  {
+    name: "the Great Gig Book",
+    pdf: "great_gig_book.pdf",
+    offset: 3,
+  },
   { name: "Jazz Fakebook", pdf: "jfakebk.pdf", offset: 0 },
   { name: "Jazz LTD", pdf: "jazzltd.pdf", offset: 0 },
   { name: "Latin Fake Book", pdf: "ltfakebk.pdf", offset: 0 },
@@ -54,6 +64,11 @@ const pdfLibrary: libraryObject[] = [
   { name: "the Real Book I", pdf: "crealbk1.pdf", offset: 0 },
   { name: "the Real Book II", pdf: "crealbk2.pdf", offset: 0 },
   { name: "the Real Book III", pdf: "crealbk3.pdf", offset: 0 },
+  {
+    name: "the Real Christmas Book",
+    pdf: "the_real_christmas_book.pdf",
+    offset: 0,
+  },
   { name: "the Book", pdf: "thebook.pdf", offset: 0 },
   {
     name: "The Ultimate Pop Rock Fake Book",
