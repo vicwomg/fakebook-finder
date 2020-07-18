@@ -7,7 +7,7 @@ const TitleBar = ({ rightContent }: { rightContent?: ReactNode }) => {
     <>
       <div className="title-bar">
         <Link to="/">
-          <h2>OneFakebook</h2>
+          <h2>OneBook</h2>
         </Link>
         {!!rightContent && rightContent}
       </div>
