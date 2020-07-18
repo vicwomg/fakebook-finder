@@ -9,6 +9,6 @@ export type songObject = {
 
 export type libraryObject = {
   name: string;
-  pdf: string;
+  pdfFile: string;
   offset: number; // page offset, for misaligned indexes
 };

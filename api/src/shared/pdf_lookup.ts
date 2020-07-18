@@ -33,7 +33,7 @@ const getPdf = async (fakebookName: string, page: number) => {
 
   if (!!libraryObject) {
     //load source pdf
-    const filePath = pdfPath + "/" + libraryObject.pdf;
+    const filePath = pdfPath + "/" + libraryObject.pdfFile;
     const uint8Array = fs.readFileSync(filePath);
     const sourcePdfDoc = await PDFDocument.load(uint8Array, {
       parseSpeed: ParseSpeeds.Fastest,
