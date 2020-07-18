@@ -83,7 +83,7 @@ const pdfLibrary: libraryObject[] = [
     pdfFile: "real_christmas_book.pdf",
     offset: 0,
   },
-  { name: "the Book", pdfFile: "thebook.pdf", offset: 0 },
+  { name: "the Book", pdfFile: "the_book.pdf", offset: 0 },
   { name: "the Tango Fake Book", pdfFile: "tango_fake_book.pdf", offset: 8 },
   {
     name: "The Ultimate Pop Rock Fake Book",
