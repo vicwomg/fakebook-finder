@@ -37,6 +37,16 @@ const pdfLibrary: libraryObject[] = [
     offset: -1,
   },
   { name: "the Disney Fakebook", pdf: "disneyfake.pdf", offset: 0 },
+  {
+    name: "Dixieland Fake Book I",
+    pdf: "dixieland_fake_book_vol_1.pdf",
+    offset: 0,
+  },
+  {
+    name: "Dixieland Fake Book II",
+    pdf: "dixieland_fake_book_vol_2.pdf",
+    offset: 0,
+  },
   { name: "Django Fakebook", pdf: "djangofb.pdf", offset: 0 },
   {
     name: "the Firehouse Jazz Band Dixieland Fakebook",
@@ -70,6 +80,7 @@ const pdfLibrary: libraryObject[] = [
     offset: 0,
   },
   { name: "the Book", pdf: "thebook.pdf", offset: 0 },
+  { name: "the Tango Fake Book", pdf: "tango_fake_book.pdf", offset: 8 },
   {
     name: "The Ultimate Pop Rock Fake Book",
     pdf: "ulpoprock.pdf",
