@@ -36,7 +36,7 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
     isMobile ? window.innerWidth : defaultDesktopPdfWidth
   );
   const [pdf, setPdf] = React.useState<Blob>();
-  const pages = _.range(1, numPages);
+  const pages = numPages === 1 ? [1] : _.range(1, numPages);
 
   const isZoomed = (): boolean => {
     return pdfWidth >= window.innerWidth;

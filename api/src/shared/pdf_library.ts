@@ -9,7 +9,7 @@ const pdfLibrary: libraryObject[] = [
   {
     name: "557 Standards Swing to Bop",
     pdfFile: "557_standards.pdf",
-    offset: 6,
+    offset: 0,
   },
   {
     name: "the Choro Fake Book",
