@@ -26,10 +26,11 @@ const SearchResults = ({
 }) => {
   const history = useHistory();
 
-  const handleClick = (source: string, page: string) => {
+  const handleClick = (source: string, page: string, title: string) => {
     history.push(`/source/${source}/${page}`, {
       searchResults: searchResults,
       searchQuery: searchQuery,
+      title: title,
     });
   };
 
@@ -38,7 +39,7 @@ const SearchResults = ({
       {searchResults.map((r, index) => {
         return (
           <div
-            onClick={() => handleClick(r.source, r.page)}
+            onClick={() => handleClick(r.source, r.page, r.title)}
             key={index}
             className={styles.result}
           >

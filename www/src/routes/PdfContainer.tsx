@@ -15,6 +15,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 type searchData = {
   searchQuery: string;
   searchResults: SearchResult[];
+  title: string;
 };
 
 type SearchResult = {
@@ -51,14 +52,19 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
 
   React.useEffect(() => {
     setLoading(true);
+    var titleAddition = ` - ${title}`;
     const loadPdf = async () => {
       const url = `${API_URL}/fetch/pdf?source=${source}&page=${page}`;
       const response = await fetch(url);
       const content = await response.blob();
       setPdf(content);
+      if (title) document.title = document.title + titleAddition;
       setLoading(false);
     };
     loadPdf();
+    return () => {
+      document.title = document.title.replace(titleAddition, "");
+    };
   }, [source, page]);
 
   const previousState = location.state as searchData;
@@ -70,6 +76,8 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
     previousState && previousState.searchResults
       ? previousState.searchResults
       : null;
+  const title =
+    previousState && previousState.title ? previousState.title : null;
 
   return (
     <>
