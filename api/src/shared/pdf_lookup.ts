@@ -57,8 +57,6 @@ const getPdf = async (fakebookName: string, page: number) => {
       range = [pageIndex];
     }
 
-    console.log(range);
-
     const copiedPages = await pdfDoc.copyPages(sourcePdfDoc, range);
     copiedPages.map((e) => pdfDoc.addPage(e));
 
