@@ -43,7 +43,7 @@ RewriteRule ^ index.html [QSA,L]
 - Under `<Directory "/var/www/html">`, replace: `AllowOverride None` with: `AllowOverride All`
 - Restart httpd: `sudo systemctl restart httpd`
 
-For Debian, the steps were:
+For Debian, with apache2 the steps were:
 
 Edit: 
 
