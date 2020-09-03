@@ -26,9 +26,9 @@ It should work?!
 
 I think it will work?!?!
 
-## React router deep links on EC2 deploy
+## React router deep links / refresh
 
-If deploying to Amazon EC2 on an Apache/httpd server, there's some extra steps to make the deep links work. (assumes you've deployed to /var/www/html)
+If deploying to Amazon EC2 on an Apache/httpd server, there's some extra steps to make the deep links and page refresh work. (assumes you've deployed to /var/www/html)
 
 - Under /var/www/html, add an .htaccess file containing the following:
 
@@ -42,3 +42,28 @@ RewriteRule ^ index.html [QSA,L]
 - Edit httpd.conf: `sudo nano /etc/httpd/conf/httpd.conf`
 - Under `<Directory "/var/www/html">`, replace: `AllowOverride None` with: `AllowOverride All`
 - Restart httpd: `sudo systemctl restart httpd`
+
+For Debian, the steps were:
+
+Edit: 
+
+```
+/etc/apache2/sites-enabled/000-default.conf
+```
+
+Under <VirtualHost ...>, add:
+  
+```
+<Directory "/var/www/html">
+    RewriteEngine on
+    # Don't rewrite files or directories
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    # Rewrite everything else to index.html to allow html5 state links
+    RewriteRule ^ index.html [L]
+</Directory>
+```
+
+sudo a2enmod rewrite
+sudo /etc/init.d/apache2 restart
