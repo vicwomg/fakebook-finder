@@ -65,5 +65,5 @@ Under <VirtualHost ...>, add:
 </Directory>
 ```
 
-sudo a2enmod rewrite
-sudo /etc/init.d/apache2 restart
+`sudo a2enmod rewrite`
+`sudo /etc/init.d/apache2 restart`
