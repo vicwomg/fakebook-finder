@@ -67,6 +67,11 @@ const pdfLibrary: libraryObject[] = [
     pdfFile: "library_of_musicians_jazz.pdf",
     offset: 0,
   },
+  {
+    name: "Nabor's Dixieland Book",
+    pdfFile: "nabors_dixieland_book.pdf",
+    offset: 0,
+  },
   { name: "the New Real Book I", pdfFile: "new_real_book_1.pdf", offset: 0 },
   { name: "the New Real Book II", pdfFile: "new_real_book_2.pdf", offset: 0 },
   { name: "the New Real Book III", pdfFile: "new_real_book_3.pdf", offset: 0 },
