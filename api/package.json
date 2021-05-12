@@ -39,7 +39,7 @@
     "fs": "^0.0.1-security",
     "helmet": "^3.23.3",
     "http-status-codes": "^1.4.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
     "papaparse": "^5.2.0",
