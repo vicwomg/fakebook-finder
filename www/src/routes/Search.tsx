@@ -1,12 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { API_URL } from "../constants";
-import { useParams } from "react-router-dom";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import _ from "lodash";
+import React from "react";
+import { Link, useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import TitleBar from "../components/TitleBar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { API_URL } from "../constants";
 import SearchResults, { SearchResult } from "./SearchResults";
 
 const Search = () => {
@@ -63,12 +62,10 @@ const Search = () => {
           placeholder="Enter a song title"
           onChange={handleInputChange}
           value={input}
-          size={26}
           style={{
-            fontSize: 20,
-            marginLeft: -8,
             marginBottom: 10,
-            padding: "5px 22px 5px 8px",
+            minWidth: "200px",
+            padding: "7px 22px 5px 8px",
           }}
         ></input>
         <span
