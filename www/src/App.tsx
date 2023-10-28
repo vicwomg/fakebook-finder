@@ -1,11 +1,11 @@
+import { createBrowserHistory } from "history";
 import React from "react";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import "./App.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { API_URL } from "./constants";
+import Info from "./routes/Info";
 import PdfContainer from "./routes/PdfContainer";
 import Search from "./routes/Search";
-import Info from "./routes/Info";
-import { createBrowserHistory } from "history";
 
 export const history = createBrowserHistory();
 
@@ -15,7 +15,7 @@ const App = () => {
   }
 
   return (
-    <Router>
+    <Router basename="/onebook">
       <div className="App">
         <Switch>
           <Route path="/source/:source/:page" component={PdfContainer}></Route>
