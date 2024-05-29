@@ -1,15 +1,15 @@
-import React from "react";
-import { API_URL } from "../constants";
-import { useParams, RouteComponentProps, Link } from "react-router-dom";
-import _ from "lodash";
-import LoadingSpinner from "../components/LoadingSpinner";
-import { Document, Page, pdfjs } from "react-pdf";
-import { isMobile } from "react-device-detect";
-import "./PdfContainer.css";
-import TitleBar from "../components/TitleBar";
-import SearchResults from "./SearchResults";
+import { faList, faPrint, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faList, faPrint } from "@fortawesome/free-solid-svg-icons";
+import _ from "lodash";
+import React from "react";
+import { isMobile } from "react-device-detect";
+import { Document, Page, pdfjs } from "react-pdf";
+import { Link, RouteComponentProps, useParams } from "react-router-dom";
+import LoadingSpinner from "../components/LoadingSpinner";
+import TitleBar from "../components/TitleBar";
+import { API_URL } from "../constants";
+import "./PdfContainer.css";
+import SearchResults from "./SearchResults";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 type searchData = {

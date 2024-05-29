@@ -1,13 +1,13 @@
 var fs = require("fs");
-import { PDFDocument, ParseSpeeds } from "pdf-lib";
-import pdfLibrary from "./pdf_library";
 import { masterIndex } from "@server";
-import { libraryObject } from "./constants";
 import _ from "lodash";
+import { PDFDocument, ParseSpeeds } from "pdf-lib";
+import { libraryObject } from "./constants";
+import pdfLibrary from "./pdf_library";
 
 const lookupLibrary = (fakebookName: string) => {
   return pdfLibrary.find((e: libraryObject) => {
-    return e.name === fakebookName;
+    return e.name.toLowerCase() === fakebookName.toLowerCase();
   });
 };
 
