@@ -14,7 +14,7 @@ const Search = () => {
   const [searchFailed, setSearchFailed] = React.useState<boolean>(false);
   const [input, setInput] = React.useState<string>("");
 
-  const { query } = useParams();
+  const { query } = useParams<{ query?: string }>();
 
   React.useEffect(() => {
     if (!!query) {

@@ -28,7 +28,10 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
   const defaultDesktopPdfWidth = window.innerWidth / 2 - 20;
   const printHeight = 800;
 
-  const { source, page } = useParams();
+  const { source = "", page = "" } = useParams<{
+    source: string;
+    page: string;
+  }>();
   const [numPages, setNumPages] = React.useState<number>(0);
   const [addPage, setAddPage] = React.useState<boolean>(false);
   const [showResults, setShowResults] = React.useState<boolean>(false);
@@ -54,7 +57,7 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
     setLoading(true);
     var titleAddition = ` - ${title}`;
     const loadPdf = async () => {
-      const url = `${API_URL}/fetch/pdf?source=${source}&page=${page}`;
+      const url = `${API_URL}/fetch/pdf?source=${source}&page=${page}&title=${title}`;
       const response = await fetch(url);
       const content = await response.blob();
       setPdf(content);

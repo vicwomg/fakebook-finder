@@ -1,8 +1,8 @@
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import styles from "./SearchResults.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 export type SearchResult = {
   title: string;
@@ -12,7 +12,7 @@ export type SearchResult = {
 
 export type CurrentSelection = {
   source: string;
-  page: number;
+  page: number | string;
 };
 
 const SearchResults = ({
