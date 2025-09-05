@@ -9,13 +9,13 @@ FetchRouter.get("/pdf", async (req: Request, res: Response) => {
   const page = req.query.page as string;
   const title = req.query.title as string;
 
-  const startTime = performance.now();
+  const startTime = process.hrtime();
   logger.info(`Fetching pdf for: ${title} / ${source} / page ${page}`);
 
   const pdf = await getPdf(source, parseInt(page));
 
-  const endTime = performance.now();
-  const duration = Math.round(endTime - startTime);
+  const endTime = process.hrtime(startTime);
+  const duration = Math.round(endTime[0] * 1000 + endTime[1] / 1000000);
 
   logger.info(`Fetched pdf for: ${title} in ${duration}ms`);
 
