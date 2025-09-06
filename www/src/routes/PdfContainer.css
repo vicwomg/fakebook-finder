@@ -28,9 +28,15 @@
 .caret {
   width: 0;
   height: 0;
-  margin-right: 20px;
+  margin-right: 50px;
   border: 10px solid transparent;
   border-bottom-color: white;
+}
+
+@media (max-width: 768px) {
+  .caret {
+    margin-right: 40px;
+  }
 }
 
 .result-container {

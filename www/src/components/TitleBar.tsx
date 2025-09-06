@@ -23,6 +23,8 @@ const TitleBar = ({
           <h2>OneBook</h2>
         </Link>
         <div className="right-content">
+          {!!rightContent && rightContent}
+
           <button
             className="unstyled-button"
             onClick={() => {
@@ -31,7 +33,6 @@ const TitleBar = ({
           >
             <FontAwesomeIcon icon={faArrowLeft} title="Back" />
           </button>
-          {!!rightContent && rightContent}
           <Link to={`/`}>
             <FontAwesomeIcon icon={faSearch} title="Search" />
           </Link>

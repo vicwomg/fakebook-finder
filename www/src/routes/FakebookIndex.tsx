@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import TitleBar from "../components/TitleBar";
 import { API_URL } from "../constants";
 import "../styles/Global.css";
@@ -21,6 +21,7 @@ const FakebookIndex = () => {
   const [data, setData] = React.useState<FakebookData | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
+  const history = useHistory();
 
   React.useEffect(() => {
     if (name) {
@@ -44,6 +45,12 @@ const FakebookIndex = () => {
         });
     }
   }, [name]);
+
+  const handleSongClick = (source: string, page: number, title: string) => {
+    history.push(`/source/${encodeURIComponent(source)}/${page}`, {
+      title,
+    });
+  };
 
   if (loading) {
     return (
@@ -97,8 +104,10 @@ const FakebookIndex = () => {
             .sort((a, b) => a.title.localeCompare(b.title))
             .map((song, index) => (
               <React.Fragment key={index}>
-                <Link
-                  to={`/source/${encodeURIComponent(song.source)}/${song.page}`}
+                <button
+                  onClick={() =>
+                    handleSongClick(song.source, song.page, song.title)
+                  }
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -106,11 +115,11 @@ const FakebookIndex = () => {
                     textAlign: "left",
                     gap: "10px",
                   }}
-                  className="clickable-row"
+                  className="unstyled-button clickable-row"
                 >
                   <div>{song.title}</div>
                   <div style={{ color: "#666" }}>{song.page}</div>
-                </Link>
+                </button>
               </React.Fragment>
             ))}
         </div>

@@ -85,20 +85,13 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
   return (
     <>
       <TitleBar
-        onBack={
-          searchQuery
-            ? () => {
-                history.push(`/search/${searchQuery}`);
-              }
-            : undefined
-        }
         rightContent={
           <>
             {searchQuery && (
               <FontAwesomeIcon
                 icon={faList}
                 title="Select another chart"
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", color: "grey" }}
                 onClick={() => {
                   setShowResults(!showResults);
                 }}
@@ -107,7 +100,11 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
             <FontAwesomeIcon
               icon={faPrint}
               title="Print"
-              style={{ cursor: "pointer" }}
+              style={{
+                cursor: "pointer",
+                color: "grey",
+                marginRight: 10,
+              }}
               onClick={() => {
                 window.print();
               }}

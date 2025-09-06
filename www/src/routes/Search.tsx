@@ -6,29 +6,83 @@ import { useHistory, useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import TitleBar from "../components/TitleBar";
 import { API_URL } from "../constants";
-import "../styles/Global.css";
 import SearchResults, { SearchResult } from "./SearchResults";
 
 const Search = () => {
   const [results, setResults] = React.useState<Array<SearchResult>>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [searchFailed, setSearchFailed] = React.useState<boolean>(false);
-  const [input, setInput] = React.useState<string>("");
+  const [initialSearchDone, setInitialSearchDone] =
+    React.useState<boolean>(false);
+  const [input, setInput] = React.useState<string>(() => {
+    // Initialize from localStorage with expiration check
+    const getStoredSearchInput = () => {
+      try {
+        const stored = localStorage.getItem("searchInputData");
+        if (!stored) return "";
+
+        const { value, timestamp } = JSON.parse(stored);
+        const oneHourAgo = Date.now() - 60 * 60 * 1000; // 1 hour in milliseconds
+
+        if (timestamp < oneHourAgo) {
+          // Data is older than 1 hour, clear it
+          localStorage.removeItem("searchInputData");
+          return "";
+        }
+
+        return value || "";
+      } catch (error) {
+        // Invalid JSON or other error, clear it
+        localStorage.removeItem("searchInputData");
+        return "";
+      }
+    };
+
+    return getStoredSearchInput();
+  });
 
   const { query } = useParams<{ query?: string }>();
   const history = useHistory();
 
+  // Handle URL query parameter and persisted search
   React.useEffect(() => {
     if (!!query) {
+      // URL has query parameter - use it
       setInput(query);
+      localStorage.setItem(
+        "searchInputData",
+        JSON.stringify({
+          value: query,
+          timestamp: Date.now(),
+        })
+      );
       handleSearch(query);
+      setInitialSearchDone(true);
+    } else if (!initialSearchDone) {
+      // No URL query and haven't done initial search yet
+      // The input is already loaded from localStorage with expiration check
+      if (input && input.length >= 2) {
+        handleSearch(input);
+      }
+      setInitialSearchDone(true);
     }
-  }, [query]);
+  }, [query, initialSearchDone]); // Runs when query or initialSearchDone changes
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-    e.target.value !== null && setSearchFailed(false);
-    debounceSearch(e.target.value);
+    const value = e.target.value;
+    setInput(value);
+
+    // Save to localStorage with timestamp
+    localStorage.setItem(
+      "searchInputData",
+      JSON.stringify({
+        value: value,
+        timestamp: Date.now(),
+      })
+    );
+
+    value !== null && setSearchFailed(false);
+    debounceSearch(value);
   };
 
   const handleSearch = (value: string) => {
@@ -48,7 +102,7 @@ const Search = () => {
     }
   };
 
-  const debounceSearch = React.useCallback(_.debounce(handleSearch, 400), []);
+  const debounceSearch = React.useCallback(_.debounce(handleSearch, 500), []);
 
   const handleRandomSong = () => {
     setLoading(true);
@@ -56,8 +110,10 @@ const Search = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          const { source, page } = data.result;
-          history.push(`/source/${encodeURIComponent(source)}/${page}`);
+          const { source, page, title } = data.result;
+          history.push(`/source/${encodeURIComponent(source)}/${page}`, {
+            title,
+          });
         }
       })
       .catch((error) => {
@@ -71,7 +127,7 @@ const Search = () => {
       <TitleBar />
       <div className="container">
         <input
-          placeholder="Enter a song title"
+          placeholder="Enter a song title to search"
           onChange={handleInputChange}
           value={input}
           autoFocus
@@ -87,6 +143,8 @@ const Search = () => {
           onClick={() => {
             setInput("");
             setResults([]);
+            // Clear from localStorage
+            localStorage.removeItem("searchInputData");
           }}
           className="clear-button"
         >
