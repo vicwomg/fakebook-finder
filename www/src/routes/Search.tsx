@@ -145,6 +145,7 @@ const Search = () => {
             setResults([]);
             // Clear from localStorage
             localStorage.removeItem("searchInputData");
+            document.getElementById("search-input")?.focus();
           }}
           className="clear-button"
         >
