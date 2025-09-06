@@ -3,6 +3,7 @@ import React from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import "./App.css";
 import { API_URL } from "./constants";
+import FakebookIndex from "./routes/FakebookIndex";
 import Info from "./routes/Info";
 import PdfContainer from "./routes/PdfContainer";
 import Search from "./routes/Search";
@@ -19,6 +20,9 @@ const App = () => {
       <div className="App">
         <Switch>
           <Route path="/source/:source/:page" component={PdfContainer}></Route>
+          <Route path="/fakebook/:name">
+            <FakebookIndex />
+          </Route>
           <Route path="/search/:query">
             <Search />
           </Route>

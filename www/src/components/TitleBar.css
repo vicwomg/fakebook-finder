@@ -18,6 +18,12 @@
   cursor: pointer;
 }
 
+.right-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 @media only screen and (max-width: 500px) {
   .title-bar {
     padding: 10px 10px;

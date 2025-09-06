@@ -1,4 +1,8 @@
-import { faList, faPrint, faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faList,
+  faPrint,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import _ from "lodash";
 import React from "react";
@@ -86,25 +90,15 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
     <>
       <TitleBar
         rightContent={
-          <div>
-            <FontAwesomeIcon
-              icon={faPrint}
-              title="Print"
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                window.print();
-              }}
-            />
-            {searchQuery ? (
+          <>
+            {searchQuery && (
               <>
-                &nbsp; &nbsp;
                 <Link to={`/search/${searchQuery}`}>
                   <FontAwesomeIcon
-                    icon={faSearch}
+                    icon={faArrowLeft}
                     title="Back to search results"
                   />
                 </Link>
-                &nbsp; &nbsp;
                 <FontAwesomeIcon
                   icon={faList}
                   title="Select another chart"
@@ -114,15 +108,16 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
                   }}
                 />
               </>
-            ) : (
-              <>
-                &nbsp; &nbsp;
-                <Link to={`/`}>
-                  <FontAwesomeIcon icon={faSearch} title="Back to search" />
-                </Link>
-              </>
             )}
-          </div>
+            <FontAwesomeIcon
+              icon={faPrint}
+              title="Print"
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                window.print();
+              }}
+            />
+          </>
         }
       />
       {loading ? (

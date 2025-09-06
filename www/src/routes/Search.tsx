@@ -1,8 +1,6 @@
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import _ from "lodash";
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import TitleBar from "../components/TitleBar";
 import { API_URL } from "../constants";
@@ -15,6 +13,7 @@ const Search = () => {
   const [input, setInput] = React.useState<string>("");
 
   const { query } = useParams<{ query?: string }>();
+  const history = useHistory();
 
   React.useEffect(() => {
     if (!!query) {
@@ -48,15 +47,25 @@ const Search = () => {
 
   const debounceSearch = React.useCallback(_.debounce(handleSearch, 400), []);
 
+  const handleRandomSong = () => {
+    setLoading(true);
+    fetch(`${API_URL}/info/random`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          const { source, page } = data.result;
+          history.push(`/source/${encodeURIComponent(source)}/${page}`);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching random song:", error);
+        setLoading(false);
+      });
+  };
+
   return (
     <>
-      <TitleBar
-        rightContent={
-          <Link to="/info">
-            <FontAwesomeIcon icon={faInfoCircle} />{" "}
-          </Link>
-        }
-      />
+      <TitleBar />
       <div style={{ padding: 20 }}>
         <input
           placeholder="Enter a song title"
@@ -82,6 +91,36 @@ const Search = () => {
         >
           ╳
         </span>
+
+        <div style={{ marginTop: 20, marginBottom: 20 }}>
+          <button
+            onClick={handleRandomSong}
+            disabled={loading}
+            style={{
+              padding: "8px 16px",
+              fontSize: "14px",
+              color: "#fff",
+              backgroundColor: "#007bff",
+              border: "none",
+              borderRadius: "5px",
+              cursor: loading ? "not-allowed" : "pointer",
+              opacity: loading ? 0.7 : 1,
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              if (!loading) {
+                e.currentTarget.style.backgroundColor = "#0056b3";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!loading) {
+                e.currentTarget.style.backgroundColor = "#007bff";
+              }
+            }}
+          >
+            {loading ? "Loading..." : "🎲 Random song!"}
+          </button>
+        </div>
 
         {loading && <LoadingSpinner />}
         {results && !loading && results.length > 0 && (
