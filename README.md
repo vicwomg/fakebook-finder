@@ -45,14 +45,14 @@ RewriteRule ^ index.html [QSA,L]
 
 For Debian, with apache2 the steps were:
 
-Edit: 
+Edit:
 
 ```
 /etc/apache2/sites-enabled/000-default.conf
 ```
 
 Under <VirtualHost ...>, add:
-  
+
 ```
 <Directory "/var/www/html">
     RewriteEngine on
@@ -67,3 +67,11 @@ Under <VirtualHost ...>, add:
 
 `sudo a2enmod rewrite`
 `sudo /etc/init.d/apache2 restart`
+
+## Troubleshooting
+
+For slow-loading pdfs, you may want to try the `optimize_pdfs.sh` script in the scripts folder to re-encode them. Or ad-hoc using ghostscript:
+
+```
+gs -sDEVICE=pdfwrite -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=test_optimized.pdf your_slow_pdf.pdf
+```
