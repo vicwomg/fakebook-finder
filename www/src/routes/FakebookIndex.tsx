@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import TitleBar from "../components/TitleBar";
 import { API_URL } from "../constants";
+import "../styles/Global.css";
 
 type Song = {
   title: string;
@@ -82,72 +83,34 @@ const FakebookIndex = () => {
   return (
     <>
       <TitleBar />
-      <div
-        style={{
-          maxWidth: "800px",
-          margin: "0 auto",
-          padding: "20px",
-          textAlign: "left",
-        }}
-      >
-        <div style={{ marginBottom: "20px" }}>
-          <Link to="/info" style={{ color: "#007bff", textDecoration: "none" }}>
-            ← Back to All Fakebooks
-          </Link>
-        </div>
-
-        <h1 style={{ color: "#333", marginBottom: "10px" }}>{data.fakebook}</h1>
+      <div className="container">
+        <h2 style={{ color: "#333", marginBottom: "10px", marginTop: 0 }}>
+          {data.fakebook}
+        </h2>
 
         <p style={{ color: "#666", marginBottom: "30px" }}>
           {data.count} songs available
         </p>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr auto",
-            gap: "10px",
-            fontSize: "14px",
-          }}
-        >
+        <div>
           {data.songs
             .sort((a, b) => a.title.localeCompare(b.title))
             .map((song, index) => (
               <React.Fragment key={index}>
-                <div>
-                  <Link
-                    to={`/source/${encodeURIComponent(song.source)}/${
-                      song.page
-                    }`}
-                    style={{
-                      color: "#007bff",
-                      textDecoration: "none",
-                      display: "block",
-                      padding: "8px 0",
-                      borderBottom: "1px solid #eee",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = "#0056b3";
-                      e.currentTarget.style.backgroundColor = "#f8f9fa";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = "#007bff";
-                      e.currentTarget.style.backgroundColor = "transparent";
-                    }}
-                  >
-                    {song.title}
-                  </Link>
-                </div>
-                <div
+                <Link
+                  to={`/source/${encodeURIComponent(song.source)}/${song.page}`}
                   style={{
-                    color: "#666",
-                    padding: "8px 0",
-                    borderBottom: "1px solid #eee",
-                    textAlign: "right",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    textAlign: "left",
+                    gap: "10px",
                   }}
+                  className="clickable-row"
                 >
-                  {song.page}
-                </div>
+                  <div>{song.title}</div>
+                  <div style={{ color: "#666" }}>{song.page}</div>
+                </Link>
               </React.Fragment>
             ))}
         </div>

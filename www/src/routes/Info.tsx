@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import TitleBar from "../components/TitleBar";
 import { API_URL } from "../constants";
+import "../styles/Global.css";
 
 type apiInfo = {
   songCount: number;
@@ -20,23 +21,13 @@ const Info = () => {
   return (
     <>
       <TitleBar />
-      <div
-        style={{
-          maxWidth: 500,
-          textAlign: "left",
-          marginLeft: "auto",
-          marginRight: "auto",
-          padding: 10,
-        }}
-      >
-        <h2>
-          Total Songs: <span style={{ color: "green" }}>{info?.songCount}</span>
-        </h2>
-
-        <h2>
+      <div className="container">
+        <h3>
           Fakebooks:{" "}
           <span style={{ color: "green" }}>{info?.fakebooks.length}</span>
-        </h2>
+          &nbsp;&nbsp;Songs:{" "}
+          <span style={{ color: "green" }}>{info?.songCount}</span>
+        </h3>
         <ul style={{ listStyle: "none", padding: 0 }}>
           {info &&
             info.fakebooks &&
@@ -44,26 +35,9 @@ const Info = () => {
               <li key={index} style={{ marginBottom: "8px" }}>
                 <Link
                   to={`/fakebook/${encodeURIComponent(fakebook)}`}
-                  style={{
-                    color: "#007bff",
-                    textDecoration: "none",
-                    display: "block",
-                    padding: "10px",
-                    border: "1px solid #dee2e6",
-                    borderRadius: "5px",
-                    backgroundColor: "#f8f9fa",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#e9ecef";
-                    e.currentTarget.style.color = "#0056b3";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "#f8f9fa";
-                    e.currentTarget.style.color = "#007bff";
-                  }}
+                  className="grey-button"
                 >
-                  📖 {fakebook}
+                  {fakebook}
                 </Link>
               </li>
             ))}

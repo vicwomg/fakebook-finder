@@ -12,6 +12,11 @@ const pdfLibrary: libraryObject[] = [
     offset: 0,
   },
   {
+    name: "Brazilian Jazz Real Book",
+    pdfFile: "brazilian_jazz_real_book.pdf",
+    offset: 14,
+  },
+  {
     name: "the Choro Fake Book",
     pdfFile: "choro_fakebook.pdf",
     offset: 3,

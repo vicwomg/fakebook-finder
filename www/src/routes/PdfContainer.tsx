@@ -1,14 +1,10 @@
-import {
-  faArrowLeft,
-  faList,
-  faPrint,
-} from "@fortawesome/free-solid-svg-icons";
+import { faList, faPrint } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import _ from "lodash";
 import React from "react";
 import { isMobile } from "react-device-detect";
 import { Document, Page, pdfjs } from "react-pdf";
-import { Link, RouteComponentProps, useParams } from "react-router-dom";
+import { RouteComponentProps, useHistory, useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import TitleBar from "../components/TitleBar";
 import { API_URL } from "../constants";
@@ -30,7 +26,7 @@ type SearchResult = {
 
 const PdfContainer = ({ location }: RouteComponentProps) => {
   const defaultDesktopPdfWidth = window.innerWidth / 2 - 20;
-  const printHeight = 800;
+  const history = useHistory();
 
   const { source = "", page = "" } = useParams<{
     source: string;
@@ -89,25 +85,24 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
   return (
     <>
       <TitleBar
+        onBack={
+          searchQuery
+            ? () => {
+                history.push(`/search/${searchQuery}`);
+              }
+            : undefined
+        }
         rightContent={
           <>
             {searchQuery && (
-              <>
-                <Link to={`/search/${searchQuery}`}>
-                  <FontAwesomeIcon
-                    icon={faArrowLeft}
-                    title="Back to search results"
-                  />
-                </Link>
-                <FontAwesomeIcon
-                  icon={faList}
-                  title="Select another chart"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setShowResults(!showResults);
-                  }}
-                />
-              </>
+              <FontAwesomeIcon
+                icon={faList}
+                title="Select another chart"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setShowResults(!showResults);
+                }}
+              />
             )}
             <FontAwesomeIcon
               icon={faPrint}
@@ -155,10 +150,16 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
             <Document file={pdf}>
               {pages.map((e, index) => (
                 <React.Fragment key={index}>
-                  <Page pageNumber={e} height={printHeight} />
+                  <div style={{ height: index === 0 ? 15 : 30 }} />
+                  <Page pageNumber={e} />
                 </React.Fragment>
               ))}
-              {addPage && <Page pageNumber={numPages} height={printHeight} />}
+              {addPage && (
+                <>
+                  <div style={{ height: 30 }} />
+                  <Page pageNumber={numPages} />
+                </>
+              )}
             </Document>
           </div>
           {!!numPages && (

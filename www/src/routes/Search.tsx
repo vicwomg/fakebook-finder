@@ -1,9 +1,12 @@
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import _ from "lodash";
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import TitleBar from "../components/TitleBar";
 import { API_URL } from "../constants";
+import "../styles/Global.css";
 import SearchResults, { SearchResult } from "./SearchResults";
 
 const Search = () => {
@@ -66,14 +69,17 @@ const Search = () => {
   return (
     <>
       <TitleBar />
-      <div style={{ padding: 20 }}>
+      <div className="container">
         <input
           placeholder="Enter a song title"
           onChange={handleInputChange}
           value={input}
+          autoFocus
+          id="search-input"
           style={{
             marginBottom: 10,
-            minWidth: "200px",
+            width: "85%",
+            fontSize: 18,
             padding: "7px 22px 5px 8px",
           }}
         ></input>
@@ -82,45 +88,22 @@ const Search = () => {
             setInput("");
             setResults([]);
           }}
-          style={{
-            cursor: "pointer",
-            marginLeft: -24,
-            fontSize: 16,
-            fontWeight: 500,
-          }}
+          className="clear-button"
         >
-          ╳
+          <FontAwesomeIcon icon={faTimes} />
         </span>
 
-        <div style={{ marginTop: 20, marginBottom: 20 }}>
-          <button
-            onClick={handleRandomSong}
-            disabled={loading}
-            style={{
-              padding: "8px 16px",
-              fontSize: "14px",
-              color: "#fff",
-              backgroundColor: "#007bff",
-              border: "none",
-              borderRadius: "5px",
-              cursor: loading ? "not-allowed" : "pointer",
-              opacity: loading ? 0.7 : 1,
-              transition: "all 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              if (!loading) {
-                e.currentTarget.style.backgroundColor = "#0056b3";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!loading) {
-                e.currentTarget.style.backgroundColor = "#007bff";
-              }
-            }}
-          >
-            {loading ? "Loading..." : "🎲 Random song!"}
-          </button>
-        </div>
+        {!results.length && (
+          <div style={{ marginTop: 20, marginBottom: 20 }}>
+            <button
+              onClick={handleRandomSong}
+              disabled={loading}
+              className="blue-button"
+            >
+              {loading ? "Loading..." : "🎲 Random song!"}
+            </button>
+          </div>
+        )}
 
         {loading && <LoadingSpinner />}
         {results && !loading && results.length > 0 && (

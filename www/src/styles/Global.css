@@ -1,0 +1,81 @@
+.unstyled-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  color: white;
+  font-size: 18px;
+}
+
+.container {
+  padding: 16px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.clear-button {
+  cursor: pointer;
+  margin-left: -20px;
+  margin-top: -2px;
+  font-size: 16px;
+  font-weight: 500;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.clear-button:hover {
+  opacity: 0.5;
+}
+
+.blue-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  opacity: 1;
+  transition: all 0.2s ease;
+}
+
+.blue-button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.blue-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.grey-button {
+  color: #007bff;
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  transition: all 0.2s ease;
+}
+
+.grey-button:hover {
+  background-color: #e9ecef;
+  color: #0056b3;
+}
+
+.clickable-row {
+  color: #007bff;
+  text-decoration: none;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.clickable-row:hover {
+  color: #0056b3;
+  background-color: #f8f9fa;
+}
