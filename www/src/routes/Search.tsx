@@ -187,6 +187,15 @@ const Search = () => {
           <FontAwesomeIcon icon={faTimes} />
         </span>
 
+        {searchFailed && (
+          <p>
+            No matches for that search{" "}
+            <span role="img" aria-label="sad">
+              😭
+            </span>
+          </p>
+        )}
+
         {!results.length && recentlyViewed.length > 0 && (
           <div style={{ marginTop: 20, marginBottom: 20 }}>
             <h3 style={{ fontSize: 18, marginBottom: 15, color: "#333" }}>
@@ -212,14 +221,7 @@ const Search = () => {
         )}
 
         {loading && <LoadingSpinner />}
-        {searchFailed && (
-          <p>
-            No matches for that search{" "}
-            <span role="img" aria-label="sad">
-              😭
-            </span>
-          </p>
-        )}
+
         {results && !loading && results.length > 0 && (
           <SearchResults searchResults={results} searchQuery={input} />
         )}
