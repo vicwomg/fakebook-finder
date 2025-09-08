@@ -6,6 +6,7 @@ import { useHistory, useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import TitleBar from "../components/TitleBar";
 import { API_URL } from "../constants";
+import { getRecentlyViewedForResults } from "../utils/recentlyViewed";
 import SearchResults, { SearchResult } from "./SearchResults";
 
 const Search = () => {
@@ -14,6 +15,9 @@ const Search = () => {
   const [searchFailed, setSearchFailed] = React.useState<boolean>(false);
   const [initialSearchDone, setInitialSearchDone] =
     React.useState<boolean>(false);
+  const [recentlyViewed, setRecentlyViewed] = React.useState<
+    Array<SearchResult>
+  >([]);
   const [input, setInput] = React.useState<string>(() => {
     // Initialize from localStorage with expiration check
     const getStoredSearchInput = () => {
@@ -66,7 +70,38 @@ const Search = () => {
       }
       setInitialSearchDone(true);
     }
-  }, [query, initialSearchDone]); // Runs when query or initialSearchDone changes
+  }, [query, initialSearchDone, input]); // Runs when query or initialSearchDone changes
+
+  // Load recently viewed items on component mount
+  React.useEffect(() => {
+    const loadRecentlyViewed = () => {
+      const recent = getRecentlyViewedForResults();
+      setRecentlyViewed(recent);
+    };
+
+    loadRecentlyViewed();
+
+    // Listen for storage changes to update recently viewed when user navigates back
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "recentlyViewed") {
+        loadRecentlyViewed();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Also reload when the window gains focus (in case user viewed PDFs in another tab)
+    const handleFocus = () => {
+      loadRecentlyViewed();
+    };
+
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -152,6 +187,18 @@ const Search = () => {
           <FontAwesomeIcon icon={faTimes} />
         </span>
 
+        {!results.length && recentlyViewed.length > 0 && (
+          <div style={{ marginTop: 20, marginBottom: 20 }}>
+            <h3 style={{ fontSize: 18, marginBottom: 15, color: "#333" }}>
+              <span role="img" aria-label="book">
+                📖
+              </span>{" "}
+              Recently Viewed
+            </h3>
+            <SearchResults searchResults={recentlyViewed} searchQuery="" />
+          </div>
+        )}
+
         {!results.length && (
           <div style={{ marginTop: 20, marginBottom: 20 }}>
             <button
@@ -165,9 +212,6 @@ const Search = () => {
         )}
 
         {loading && <LoadingSpinner />}
-        {results && !loading && results.length > 0 && (
-          <SearchResults searchResults={results} searchQuery={input} />
-        )}
         {searchFailed && (
           <p>
             No matches for that search{" "}
@@ -175,6 +219,9 @@ const Search = () => {
               😭
             </span>
           </p>
+        )}
+        {results && !loading && results.length > 0 && (
+          <SearchResults searchResults={results} searchQuery={input} />
         )}
         {results.length === 0 && (
           <p style={{ fontSize: 70, margin: 0 }}>

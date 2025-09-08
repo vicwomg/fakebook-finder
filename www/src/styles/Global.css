@@ -69,13 +69,23 @@
 .clickable-row {
   color: #007bff;
   text-decoration: none;
-  padding: 8px 0;
+  padding: 8px 12px;
   border-bottom: 1px solid #eee;
   background-color: transparent;
   transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.clickable-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0px;
 }
 
 .clickable-row:hover {
   color: #0056b3;
   background-color: #f8f9fa;
+}
+
+.is-clickable {
+  cursor: pointer;
 }

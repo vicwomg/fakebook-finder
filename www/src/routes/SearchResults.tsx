@@ -41,9 +41,9 @@ const SearchResults = ({
           <div
             onClick={() => handleClick(r.source, r.page, r.title)}
             key={index}
-            className={styles.result}
+            className="clickable-row"
           >
-            <h3>
+            <div>
               {currentSelection &&
                 currentSelection.source === r.source &&
                 Number(currentSelection.page) === Number(r.page) && (
@@ -53,8 +53,15 @@ const SearchResults = ({
                   />
                 )}
               {r.title}
-            </h3>
-            <p>
+            </div>
+            <p
+              style={{
+                fontSize: 14,
+                fontStyle: "italic",
+                color: "black",
+                margin: "4px 0px 0px",
+              }}
+            >
               {r.source} - p.{r.page}
             </p>
           </div>

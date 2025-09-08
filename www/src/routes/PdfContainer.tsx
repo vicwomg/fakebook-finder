@@ -1,15 +1,24 @@
-import { faList, faPrint } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faList,
+  faLock,
+  faLockOpen,
+  faPrint,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import _ from "lodash";
+import NoSleep from "nosleep.js";
 import React from "react";
 import { isMobile } from "react-device-detect";
 import { Document, Page, pdfjs } from "react-pdf";
-import { RouteComponentProps, useHistory, useParams } from "react-router-dom";
+import { RouteComponentProps, useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import TitleBar from "../components/TitleBar";
 import { API_URL } from "../constants";
+import { addToRecentlyViewed } from "../utils/recentlyViewed";
 import "./PdfContainer.css";
 import SearchResults from "./SearchResults";
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 type searchData = {
@@ -26,7 +35,7 @@ type SearchResult = {
 
 const PdfContainer = ({ location }: RouteComponentProps) => {
   const defaultDesktopPdfWidth = window.innerWidth / 2 - 20;
-  const history = useHistory();
+  const noSleep = new NoSleep();
 
   const { source = "", page = "" } = useParams<{
     source: string;
@@ -40,6 +49,7 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
     isMobile ? window.innerWidth : defaultDesktopPdfWidth
   );
   const [pdf, setPdf] = React.useState<Blob>();
+  const [noSleepEnabled, setNoSleepEnabled] = React.useState<boolean>(false);
   const pages = numPages === 1 ? [1] : _.range(1, numPages);
 
   const isZoomed = (): boolean => {
@@ -50,6 +60,25 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
     if (!isMobile) {
       !isZoomed() && setPdfWidth(window.innerWidth);
       isZoomed() && setPdfWidth(defaultDesktopPdfWidth);
+    }
+  };
+
+  const previousState = location.state as searchData;
+  const searchQuery =
+    previousState && previousState.searchQuery
+      ? previousState.searchQuery
+      : null;
+  const searchResults =
+    previousState && previousState.searchResults
+      ? previousState.searchResults
+      : null;
+  const title =
+    previousState && previousState.title ? previousState.title : null;
+
+  const toggleNoSleep = () => {
+    if (!noSleepEnabled) {
+      noSleep.enable();
+      setNoSleepEnabled(true);
     }
   };
 
@@ -68,19 +97,24 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
     return () => {
       document.title = document.title.replace(titleAddition, "");
     };
-  }, [source, page]);
+  }, [source, page, title]);
 
-  const previousState = location.state as searchData;
-  const searchQuery =
-    previousState && previousState.searchQuery
-      ? previousState.searchQuery
-      : null;
-  const searchResults =
-    previousState && previousState.searchResults
-      ? previousState.searchResults
-      : null;
-  const title =
-    previousState && previousState.title ? previousState.title : null;
+  // Track recently viewed PDFs after 5 seconds of viewing
+  React.useEffect(() => {
+    if (!loading && source && page && title) {
+      const timer = setTimeout(() => {
+        addToRecentlyViewed({
+          source,
+          page,
+          title,
+        });
+      }, 5000); // 5 seconds
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [loading, source, page, title]);
 
   return (
     <>
@@ -91,20 +125,46 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
               <FontAwesomeIcon
                 icon={faList}
                 title="Select another chart"
-                style={{ cursor: "pointer", color: "grey" }}
+                style={{ color: "#bbb" }}
+                className="is-clickable"
                 onClick={() => {
                   setShowResults(!showResults);
                 }}
               />
             )}
+            <div
+              style={{ position: "relative", display: "inline-block" }}
+              className="is-clickable"
+              title={
+                noSleepEnabled
+                  ? "Turn off screen sleep lock"
+                  : "Turn on screen sleep lock"
+              }
+              onClick={toggleNoSleep}
+            >
+              <FontAwesomeIcon
+                icon={noSleepEnabled ? faLock : faLockOpen}
+                style={{ color: noSleepEnabled ? "rgb(18, 136, 66)" : "#bbb" }}
+              />
+              <FontAwesomeIcon
+                icon={faEye}
+                style={{
+                  position: "absolute",
+                  bottom: "3px",
+                  left: "3.2px",
+                  fontSize: "8px",
+                  color: "black",
+                }}
+              />
+            </div>
             <FontAwesomeIcon
               icon={faPrint}
               title="Print"
               style={{
-                cursor: "pointer",
-                color: "grey",
+                color: "#bbb",
                 marginRight: 10,
               }}
+              className="is-clickable"
               onClick={() => {
                 window.print();
               }}
@@ -128,13 +188,6 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
             >
               {pages.map((e, index) => (
                 <React.Fragment key={index}>
-                  {/* this video loop hack keeps the screen from dimming, android only probably */}
-                  <video width="1" height="1" autoPlay muted loop playsInline>
-                    <source
-                      src={process.env.PUBLIC_URL + "/white.mp4"}
-                      type="video/mp4"
-                    />
-                  </video>
                   <Page pageNumber={e} width={pdfWidth} />
                 </React.Fragment>
               ))}
