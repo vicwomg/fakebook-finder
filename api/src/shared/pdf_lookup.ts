@@ -43,7 +43,11 @@ const getNextSongPageNumber = (
   }
 };
 
-const getPdf = async (fakebookName: string, page: number) => {
+const getPdf = async (
+  fakebookName: string,
+  page: number,
+  addPage?: boolean
+) => {
   const pdfPath = process.env.PDF_PATH;
   const libraryObject = lookupLibrary(fakebookName);
 
@@ -112,7 +116,7 @@ const getPdf = async (fakebookName: string, page: number) => {
       getNextSongPageNumber(fakebookName, page) + libraryObject.offset - 1;
 
     //tack on an extra page just in case it spills over to next page on multi-song-per-page
-    var endPageIndex = nextSongPageIndex + 1;
+    var endPageIndex = addPage ? nextSongPageIndex + 1 : nextSongPageIndex;
 
     //handle last page sorts of issues
     if (endPageIndex - 1 > sourcePdfDoc.getPageCount() - 1) {

@@ -8,10 +8,11 @@ FetchRouter.get("/pdf", async (req: Request, res: Response) => {
   const source = req.query.source as string;
   const page = req.query.page as string;
   const title = req.query.title as string;
+  const addPage = req.query.addPage as string;
 
   const startTime = process.hrtime();
 
-  const pdf = await getPdf(source, parseInt(page));
+  const pdf = await getPdf(source, parseInt(page), addPage === "true");
 
   const endTime = process.hrtime(startTime);
   const duration = Math.round(endTime[0] * 1000 + endTime[1] / 1000000);

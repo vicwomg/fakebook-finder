@@ -1,4 +1,5 @@
 import {
+  faDownload,
   faEye,
   faList,
   faLock,
@@ -6,7 +7,6 @@ import {
   faPrint,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import _ from "lodash";
 import NoSleep from "nosleep.js";
 import React from "react";
 import { isMobile } from "react-device-detect";
@@ -50,7 +50,6 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
   );
   const [pdf, setPdf] = React.useState<Blob>();
   const [noSleepEnabled, setNoSleepEnabled] = React.useState<boolean>(false);
-  const pages = numPages === 1 ? [1] : _.range(1, numPages);
 
   const isZoomed = (): boolean => {
     return pdfWidth >= window.innerWidth;
@@ -82,11 +81,33 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
     }
   };
 
+  const handleDownload = () => {
+    if (pdf && title) {
+      // Create a safe filename by removing/replacing special characters
+      const safeTitle =
+        title.replace(/[^a-zA-Z0-9\s\-_]/g, "").trim() || "song";
+      const safeSource = source.replace(/[^a-zA-Z0-9\s\-_]/g, "").trim();
+      const filename = `${safeTitle} - ${safeSource}.pdf`;
+
+      // Create download link
+      const url = URL.createObjectURL(pdf);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+  };
+
   React.useEffect(() => {
     setLoading(true);
     var titleAddition = ` - ${title}`;
     const loadPdf = async () => {
-      const url = `${API_URL}/fetch/pdf?source=${source}&page=${page}&title=${title}`;
+      const url = `${API_URL}/fetch/pdf?source=${source}&page=${page}&title=${title}&addPage=${
+        addPage ? "true" : "false"
+      }`;
       const response = await fetch(url);
       const content = await response.blob();
       setPdf(content);
@@ -97,7 +118,7 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
     return () => {
       document.title = document.title.replace(titleAddition, "");
     };
-  }, [source, page, title]);
+  }, [source, page, title, addPage]);
 
   // Track recently viewed PDFs after 5 seconds of viewing
   React.useEffect(() => {
@@ -162,12 +183,21 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
               title="Print"
               style={{
                 color: "#bbb",
-                marginRight: 10,
               }}
               className="is-clickable"
               onClick={() => {
                 window.print();
               }}
+            />
+            <FontAwesomeIcon
+              icon={faDownload}
+              title={`Download: ${title || "PDF"}`}
+              style={{
+                color: "#bbb",
+                marginRight: 10,
+              }}
+              className="is-clickable"
+              onClick={handleDownload}
             />
           </>
         }
@@ -186,30 +216,23 @@ const PdfContainer = ({ location }: RouteComponentProps) => {
               loading={<LoadingSpinner />}
               onLoadSuccess={(doc) => setNumPages(doc.numPages)}
             >
-              {pages.map((e, index) => (
+              {Array.from({ length: numPages }, (_, index) => (
                 <React.Fragment key={index}>
-                  <Page pageNumber={e} width={pdfWidth} />
+                  <Page pageNumber={index + 1} width={pdfWidth} />
                 </React.Fragment>
               ))}
-              {addPage && <Page pageNumber={numPages} width={pdfWidth} />}
             </Document>
           </div>
           {/* We need a special hidden version of the doc for formatting for printing, 
           otherwise there's page size issues due to hard-coded canvas */}
           <div className="pdf-container-print-only">
             <Document file={pdf}>
-              {pages.map((e, index) => (
+              {Array.from({ length: numPages }, (_, index) => (
                 <React.Fragment key={index}>
                   <div style={{ height: index === 0 ? 15 : 30 }} />
-                  <Page pageNumber={e} />
+                  <Page pageNumber={index + 1} />
                 </React.Fragment>
               ))}
-              {addPage && (
-                <>
-                  <div style={{ height: 30 }} />
-                  <Page pageNumber={numPages} />
-                </>
-              )}
             </Document>
           </div>
           {!!numPages && (
