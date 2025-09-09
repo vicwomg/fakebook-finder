@@ -56,7 +56,7 @@ const getPdf = async (fakebookName: string, page: number) => {
       // Log file size
       const stats = fs.statSync(filePath);
       const fileSizeInMB = (stats.size / (1024 * 1024)).toFixed(2);
-      logger.info(`Loading source pdf: ${fakebookName} (${fileSizeInMB}MB)`);
+      // logger.info(`Loading source pdf: ${fakebookName} (${fileSizeInMB}MB)`);
 
       const uint8Array = fs.readFileSync(filePath);
       const startTime = process.hrtime();
@@ -71,9 +71,6 @@ const getPdf = async (fakebookName: string, page: number) => {
 
       const msPerMB = (duration / parseFloat(fileSizeInMB)).toFixed(1);
       const msPerPage = (duration / pageCount).toFixed(1);
-      logger.info(
-        `Loaded source pdf: ${fakebookName} (${fileSizeInMB}MB, ${pageCount} pages) in ${duration}ms (${msPerMB}ms/MB, ${msPerPage}ms/page)`
-      );
 
       // Cache management - evict oldest if over limit
       const fileSizeMB = parseFloat(fileSizeInMB);
@@ -91,15 +88,14 @@ const getPdf = async (fakebookName: string, page: number) => {
           logger.info(`Evicted ${oldestName} from cache to free memory`);
         }
       }
-
       // Cache the loaded PDF
       pdfCache.set(fakebookName, sourcePdfDoc);
       currentCacheSize += fileSizeMB;
 
       logger.info(
-        `PDF cache: ${pdfCache.size} files, ~${currentCacheSize.toFixed(
-          1
-        )}MB used`
+        `Loaded source pdf: ${fakebookName} (${fileSizeInMB}MB, ${pageCount} pages) in ${duration}ms (${msPerMB}ms/MB, ${msPerPage}ms/page). PDF cache: ${
+          pdfCache.size
+        } files, ~${currentCacheSize.toFixed(1)}MB used`
       );
 
       // Log system memory usage periodically
@@ -107,8 +103,6 @@ const getPdf = async (fakebookName: string, page: number) => {
         // Every 3rd cache addition
         logMemoryUsage();
       }
-    } else {
-      logger.info(`Using cached source pdf: ${fakebookName}`);
     }
 
     //build output pdf
