@@ -14,7 +14,7 @@ const pdfLibrary: libraryObject[] = [
   {
     name: "Anthologie des Grilles de Jazz",
     pdfFile: "anthologie_des_grilles_de_jazz.pdf",
-    offset: -3,
+    offset: 0,
   },
   {
     name: "Beatles Complete",
