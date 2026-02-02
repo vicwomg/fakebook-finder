@@ -5,6 +5,7 @@
   background-color: #282c34;
   color: white;
   padding: 10px 20px;
+  font-size: 0.9rem;
 }
 
 .title-bar a,
@@ -16,6 +17,12 @@
 .title-bar h2 {
   margin: 0px;
   cursor: pointer;
+}
+
+.left-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .right-content {

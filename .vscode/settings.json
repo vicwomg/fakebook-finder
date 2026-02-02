@@ -1,16 +1,6 @@
 {
-  "eslint.enable": true,
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
-  "eslint.workingDirectories": ["www", "api"],
-  "eslint.codeActionsOnSave.mode": "problems",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "problems.decorations.enabled": true,
-  "editor.renderValidationDecorations": "on"
+  "editor.formatOnSave": true
 }

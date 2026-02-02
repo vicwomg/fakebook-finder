@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
+import AddToPlaylistButton from "../components/AddToPlaylistButton";
 import TitleBar from "../components/TitleBar";
 import { API_URL } from "../constants";
 import "../styles/Global.css";
@@ -104,22 +105,43 @@ const FakebookIndex = () => {
             .sort((a, b) => a.title.localeCompare(b.title))
             .map((song, index) => (
               <React.Fragment key={index}>
-                <button
+                <div
                   onClick={() =>
                     handleSongClick(song.source, song.page, song.title)
                   }
                   style={{
+                    position: "relative",
                     display: "flex",
                     justifyContent: "space-between",
                     width: "100%",
                     textAlign: "left",
-                    gap: "10px",
+                    alignItems: "center",
                   }}
-                  className="unstyled-button clickable-row"
+                  className="clickable-row" /* kept class */
                 >
-                  <div>{song.title}</div>
-                  <div style={{ color: "#666" }}>{song.page}</div>
-                </button>
+                  <div style={{ flex: 1 }}>{song.title}</div>
+                  <div
+                    style={{
+                      color: "#666",
+                      marginRight: "24px",
+                      fontSize: "12px",
+                    }}
+                  >
+                    p.{song.page}
+                  </div>
+                  <div
+                    style={{
+                      position: "absolute",
+                      right: "10px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                    }}
+                  >
+                    <AddToPlaylistButton
+                      song={{ ...song, page: String(song.page) }}
+                    />
+                  </div>
+                </div>
               </React.Fragment>
             ))}
         </div>

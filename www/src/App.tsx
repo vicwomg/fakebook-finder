@@ -6,6 +6,7 @@ import { API_URL } from "./constants";
 import FakebookIndex from "./routes/FakebookIndex";
 import Info from "./routes/Info";
 import PdfContainer from "./routes/PdfContainer";
+import Playlists from "./routes/Playlists";
 import Search from "./routes/Search";
 
 export const history = createBrowserHistory();
@@ -28,6 +29,9 @@ const App = () => {
           </Route>
           <Route path="/info">
             <Info />
+          </Route>
+          <Route path="/playlists">
+            <Playlists />
           </Route>
           <Route path="/">
             <Search />

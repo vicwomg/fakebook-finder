@@ -1,6 +1,7 @@
 import {
   faArrowLeft,
   faBookOpen,
+  faList,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,12 +20,10 @@ const TitleBar = ({
   return (
     <>
       <div className="title-bar">
-        <Link to="/">
-          <h2>OneBook</h2>
-        </Link>
-        <div className="right-content">
-          {!!rightContent && rightContent}
-
+        <div className="left-content">
+          <Link to="/" style={{ marginRight: 5 }}>
+            <h2>OneBook</h2>
+          </Link>
           <button
             className="unstyled-button"
             onClick={() => {
@@ -36,10 +35,14 @@ const TitleBar = ({
           <Link to={`/`}>
             <FontAwesomeIcon icon={faSearch} title="Search" />
           </Link>
+          <Link to="/playlists" style={{ color: "white" }}>
+            <FontAwesomeIcon icon={faList} title="Playlists" />
+          </Link>
           <Link to="/info">
             <FontAwesomeIcon icon={faBookOpen} title="Browse books" />{" "}
           </Link>
         </div>
+        <div className="right-content">{!!rightContent && rightContent}</div>
       </div>
     </>
   );

@@ -58,7 +58,7 @@ const Search = () => {
         JSON.stringify({
           value: query,
           timestamp: Date.now(),
-        })
+        }),
       );
       handleSearch(query);
       setInitialSearchDone(true);
@@ -75,7 +75,7 @@ const Search = () => {
   // Load recently viewed items on component mount
   React.useEffect(() => {
     const loadRecentlyViewed = () => {
-      const recent = getRecentlyViewedForResults();
+      const recent = getRecentlyViewedForResults(6);
       setRecentlyViewed(recent);
     };
 
@@ -113,7 +113,7 @@ const Search = () => {
       JSON.stringify({
         value: value,
         timestamp: Date.now(),
-      })
+      }),
     );
 
     value !== null && setSearchFailed(false);
@@ -209,7 +209,7 @@ const Search = () => {
         )}
 
         {!results.length && (
-          <div style={{ marginTop: 20, marginBottom: 20 }}>
+          <div style={{ marginTop: 30, marginBottom: 20 }}>
             <button
               onClick={handleRandomSong}
               disabled={loading}
@@ -225,7 +225,7 @@ const Search = () => {
         {results && !loading && results.length > 0 && (
           <SearchResults searchResults={results} searchQuery={input} />
         )}
-        {results.length === 0 && (
+        {results.length === 0 && recentlyViewed.length === 0 && (
           <p style={{ fontSize: 70, margin: 0 }}>
             <span role="img" aria-label="clef">
               🎼

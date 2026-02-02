@@ -29,7 +29,7 @@ export const getRecentlyViewed = (): RecentlyViewedItem[] => {
  * Removes duplicates and maintains max 10 items, most recent first
  */
 export const addToRecentlyViewed = (
-  item: Omit<RecentlyViewedItem, "timestamp">
+  item: Omit<RecentlyViewedItem, "timestamp">,
 ): void => {
   try {
     const currentItems = getRecentlyViewed();
@@ -37,7 +37,7 @@ export const addToRecentlyViewed = (
     // Remove any existing entry for the same source/page combination
     const filteredItems = currentItems.filter(
       (existing) =>
-        !(existing.source === item.source && existing.page === item.page)
+        !(existing.source === item.source && existing.page === item.page),
     );
 
     // Add new item at the beginning with current timestamp
@@ -68,10 +68,12 @@ export const clearRecentlyViewed = (): void => {
 /**
  * Get recently viewed items formatted for SearchResults component
  */
-export const getRecentlyViewedForResults = () => {
-  return getRecentlyViewed().map((item) => ({
-    title: item.title,
-    page: item.page,
-    source: item.source,
-  }));
+export const getRecentlyViewedForResults = (limit: number = 10) => {
+  return getRecentlyViewed()
+    .slice(0, limit)
+    .map((item) => ({
+      title: item.title,
+      page: item.page,
+      source: item.source,
+    }));
 };
