@@ -15,6 +15,7 @@ import {
   deletePlaylist,
   getPlaylists,
   Playlist,
+  removeSongFromPlaylist,
   renamePlaylist,
   reorderPlaylistSongs,
 } from "../utils/playlist";
@@ -84,6 +85,19 @@ const Playlists = () => {
       loadPlaylists();
       setEditingPlaylistId(null);
       setEditName("");
+    }
+  };
+
+  const handleDeleteSong = (
+    playlistId: string,
+    index: number,
+    e: React.MouseEvent,
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (window.confirm("Remove this song from the playlist?")) {
+      removeSongFromPlaylist(playlistId, index);
+      loadPlaylists();
     }
   };
 
@@ -272,6 +286,7 @@ const Playlists = () => {
                                 }}
                               />
                             )}
+
                           <Link
                             to={{
                               pathname: `/source/${encodeURIComponent(song.source)}/${song.page}`,
@@ -358,6 +373,30 @@ const Playlists = () => {
                                   alignItems: "center",
                                 }}
                               >
+                                <button
+                                  className="unstyled-button"
+                                  style={{ color: "lightgrey", cursor: "grab" }}
+                                  draggable
+                                  onDragStart={(e) => {
+                                    e.dataTransfer.setData(
+                                      "playlistId",
+                                      playlist.id,
+                                    );
+                                    e.dataTransfer.setData(
+                                      "fromIndex",
+                                      idx.toString(),
+                                    );
+                                  }}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                  }}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faGripVertical}
+                                    style={{ marginLeft: "10px" }}
+                                  />
+                                </button>
                                 <span
                                   style={{
                                     color: "#888",
@@ -370,32 +409,38 @@ const Playlists = () => {
                                 >
                                   {idx + 1}.
                                 </span>
-                                {song.title}
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                  }}
+                                >
+                                  <div>{song.title}</div>
+                                  <div
+                                    style={{
+                                      fontSize: "12px",
+                                      color: "#666",
+                                      marginTop: "2px",
+                                    }}
+                                  >
+                                    {song.source} - p.{song.page}
+                                  </div>
+                                </div>
                               </div>
 
                               <button
                                 className="unstyled-button"
-                                style={{ color: "lightgrey", cursor: "grab" }}
-                                draggable
-                                onDragStart={(e) => {
-                                  e.dataTransfer.setData(
-                                    "playlistId",
-                                    playlist.id,
-                                  );
-                                  e.dataTransfer.setData(
-                                    "fromIndex",
-                                    idx.toString(),
-                                  );
+                                onClick={(e) =>
+                                  handleDeleteSong(playlist.id, idx, e)
+                                }
+                                style={{
+                                  color: "#ff4444",
+                                  padding: "5px",
+                                  marginLeft: "5px",
                                 }}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                }}
+                                title="Remove song"
                               >
-                                <FontAwesomeIcon
-                                  icon={faGripVertical}
-                                  style={{ marginLeft: "10px" }}
-                                />
+                                <FontAwesomeIcon icon={faTimes} />
                               </button>
                             </div>
                           </Link>
